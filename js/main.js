@@ -1,14 +1,22 @@
 /**
  * Created by Thib on 23/06/2016.
  */
-var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example', {
+var style =["rap", "reggae", "metal"];
+var scene = {
+  life : 30
+};
+
+
+var game = new Phaser.Game(900, 600, Phaser.CANVAS, 'phaser-example', {
     preload: preload,
     create: create,
     update: update,
     render: render
 });
 
+
 function preload() {
+    //Load images
     game.load.spritesheet('sprite', 'assets/link.png', 120, 130, 80);
 
 }
@@ -16,40 +24,37 @@ function preload() {
 
 var goat;
 var goats;
-var ground;
-
+var posY = 200;
 
 function create() {
     goats = game.add.group();
 
 
     function createGoats() {
-        for (var i = 0; i <= 8; i++)
-        {
-
-            var goat = goats.create(300, 200, 'sprite');
+        // createGoats generate the goats.
+        for (var i = 0; i <= 8; i++) {
+            goat = goats.create(game.world.centerX, game.world.top, 'sprite');
             goat.scale.setTo(0.5, 0.5);
+            console.log(goat)
         }
     }
-createGoats();
-
-
-// face();
-
-
+    game.time.events.loop(Phaser.Timer.SECOND * 2, createGoats, this)
 }
 
 function update() {
-
-
-    goats.forEach(function(g){
-        g.y += 1;
-
-    });
+    //Goats move from Y min to Y max and are killed
+    setTimeout(function(){
+        goats.forEach(function () {
+            goat.y += 1;
+        });
+        if(goat.y >= 600-130 ){
+            goat.y += 0;
+            goat.y = 0;
+            goat.kill()
+        }
+    },2000);
 }
 
-function render() {
-    game.debug.spriteInfo(goats, 20, 32);
-    game.debug.spriteInfo(ground, 900, 32);
 
+function render() {
 }
