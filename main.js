@@ -14,6 +14,9 @@ function preload() {
     game.load.image('tuile', 'case-xs-light.png');
     game.load.image("background", "carte.png");
     game.load.image('cadre', 'cadre.png');
+    game.load.image('enceinte', 'enceinte.png');
+    game.load.image('pluie', 'pluie.png');
+    game.load.image('tornade', 'tornade.png');
     game.load.image('exit', 'exit.png');
     game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
     game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
@@ -22,12 +25,30 @@ function preload() {
     game.load.image('spriteLeft', 'chevres.png');
     game.load.image('spriteUpLeft', 'chevresUpLeft.png');
     game.load.image('spriteUpRight', 'chevresUpRight.png')
+    game.load.spritesheet('rain', 'assets/rain.png', 17, 17);
+    game.load.image('smoke', 'smoke-puff.png');
 
 
 }
 
+// 0 case disponible
+// 1 case chemin
+// 2 3 4 5 Cases enceintes
+var map = [
+    [   0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  0   ],
+    [   1,  1,  0,  1,  1,  1,  1,  0,  1,  0,  0,  0,  1,  0   ],
+    [   0,  1,  0,  1,  0,  0,  1,  0,  1,  1,  1,  0,  1,  0   ],
+    [   1,  1,  0,  1,  1,  0,  1,  0,  0,  0,  1,  0,  1,  0   ],
+    [   1,  0,  0,  0,  1,  0,  1,  0,  1,  1,  1,  0,  1,  0   ],
+    [   1,  1,  0,  0,  1,  0,  1,  0,  1,  0,  0,  0,  1,  0   ],
+    [   0,  1,  0,  1,  1,  0,  1,  1,  1,  0,  1,  1,  1,  0   ],
+    [   0,  1,  1,  1,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0   ],
+    [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1   ],
+    [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0   ],
+];
 
 var button;
+var enceintes;
 var popup;
 var tween = null;
 var text = '';
@@ -47,6 +68,11 @@ var goats;
 var goatX = (-35 * 1) + (39.7 * 1);
 var goatY = (14 + 17 * 1) + (17.2 * 1);
 var counter = 0;
+var core = {};
+var emitter;
+var smoke;
+var tornade;
+
 
 
 function create() {
@@ -58,10 +84,10 @@ function create() {
     for (var j = 0; j < 10; j++) {
         for (var i = 0; i < 14; i++) {
             // Décallage a chaque itération pour adapter a l'isometric
-            button = game.add.button((-35 * j) + (39.7 * i) + 325, (14 + 17 * i) + (17.2 * j) + 65, 'tuile', openWindow, this, 2, 1, 0);
+            button = game.add.button((-35 * j) + (39.7 * i) + 325, (14 + 17 * i) + (17.2 * j) + 65, 'tuile', building, this, 2, 1, 0);
             button.name = 'X' + i + '-Y' + j;
-            console.log(goatX.caseX)
-            goatY.caseY = j;
+            button.caseX = i;
+            button.caseY = j;
             button.input.useHandCursor = true;
             button.alpha = 0;
             button.events.onInputDown.add(onDown, this);
@@ -111,6 +137,19 @@ function create() {
     bobSong.pause();
     guettaSong.pause();
 
+    // Passage en mode constructeur
+    var enceinte = game.add.button(50, 450, 'enceinte', buildMode, this, 2, 1, 0);
+    enceinte.scale.setTo(0.2,0.2);
+
+    // Passage en mode pluie
+    var meteo = game.add.button(50, 350, 'pluie', rainMode, this, 2, 1, 0);
+    meteo.scale.setTo(0.3,0.3);
+
+    // Passage en mode tempête de vomi
+    var tornade = game.add.button(150, 450, 'tornade', vomiMode, this, 2, 1, 0);
+    tornade.scale.setTo(0.1,0.1);
+
+
     // Update de la musique si necessaire au click
     game.input.onDown.add(changeVolume, this);
 
@@ -129,6 +168,42 @@ function create() {
 
     // Grille de debug 100x100
     game.add.sprite(0, 0, game.create.grid('grid', 100 * 9, 100 * 6, 100, 100, 'rgba(0, 250, 0, 1)'));
+
+
+
+    // Mode pluie
+    emitter = game.add.emitter(game.world.centerX, 0, 400);
+    emitter.width = game.world.width;
+    // emitter.angle = 30; // uncomment to set an angle for the rain.
+    emitter.makeParticles('rain');
+    emitter.minParticleScale = 0.1;
+    emitter.maxParticleScale = 0.5;
+    emitter.setYSpeed(400, 600);
+    emitter.setXSpeed(-10, 10);
+    emitter.minRotation = 0;
+    emitter.maxRotation = 0;
+    emitter.start(false, 1600, 5, 0);
+    emitter.alpha = 0;
+
+    // Mode tornade de vomi
+    //  Emitters have a center point and a width/height, which extends from their center point to the left/right and up/down
+    smoke = game.add.emitter(game.world.centerX, 500, 400);
+    //  This smoke will have a width of 800px, so a particle can emit from anywhere in the range smoke.x += smoke.width / 2
+    // smoke.width = 800;
+    smoke.makeParticles('smoke');
+    smoke.setXSpeed(0, 0);
+    smoke.setYSpeed(0, 0);
+    smoke.setRotation(0, 0);
+    smoke.setAlpha(0.1, 1, 3000);
+    smoke.setScale(0.4, 2, 0.4, 2, 6000, Phaser.Easing.Quintic.Out);
+    smoke.gravity = -10;
+    smoke.start(false, 4000, 20);
+    smoke.emitX = 64;
+    smoke.emitY = 500;
+    game.add.tween(smoke).to( { emitX: 800-64 }, 1000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
+    game.add.tween(smoke).to( { emitY: 200 }, 4000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
+    smoke.alpha = 0;
+
 }
 
 // Fonction d'ouverture du popup
@@ -171,19 +246,15 @@ function closeWindow() {
 // Activation d'une case
 function onDown(sprite) {
 
-    text = "onDown: " + sprite.name;
-    selectedX = sprite.caseX;
-    selectedY = sprite.caseY;
-    sprite.tint = 0x00ff00;
 
-    if (selectedX % 3 == 0) {
-        selectedSong = "guetta";
-    } else {
-        selectedSong = "bob";
-    }
-    if (selectedSong !== nowPlaying) {
-        changeVolume();
-    }
+        text = "onDown: " + sprite.name;
+        selectedX = sprite.caseX;
+        selectedY = sprite.caseY;
+        sprite.tint = 0xff0000;
+
+        if (core.etat == "builder" && map[selectedY][selectedX] == 0) {
+            building(selectedX, selectedY);
+        }
 
 
 }
@@ -191,10 +262,14 @@ function onDown(sprite) {
 // Survol d'une case
 function onOver(sprite) {
 
+    if (core.etat == "builder" && map[sprite.caseY][sprite.caseX] == 0) {
+        sprite.alpha = 1;
+        sprite.tint = 0x00ff00;
+    } else if (core.etat == "builder") {
+        sprite.alpha = 1;
+        sprite.tint = 0xff0000;
+    }
     text = "onOver: " + sprite.name;
-
-    sprite.tint = 0xff0000;
-    sprite.alpha = 1;
 
 }
 
@@ -219,6 +294,10 @@ function update() {
     musicText2.y = Math.floor(popup.y + musicText.height / 2) - 60;
     musicText2.text = selectedX + " - " + selectedY + " - " + selectedSong;
 
+    // random vomi
+    smoke.customSort(scaleSort, this);
+
+    // checkGoat();
 }
 function moveIt(){
     var rightG = {
@@ -409,5 +488,78 @@ function changeVolume(pointer) {
         videSong.resume();
     }
     nowPlaying = selectedSong;
+
+}
+
+
+function buildMode() {
+    if (core.etat == "builder") {
+        core.etat = "repos";
+    } else {
+        core.etat = "builder";
+    }
+}
+
+function rainMode() {
+    if (core.meteo == "pluie") {
+        core.meteo = "sec";
+        emitter.alpha = 0;
+    } else {
+        core.meteo = "pluie";
+        emitter.alpha = 1;
+    }
+}
+
+function vomiMode() {
+    if (core.vomi == "sec") {
+        core.vomi = "vomi";
+        smoke.alpha = 0;
+    } else {
+        core.vomi = "sec";
+        smoke.alpha = 1;
+    }
+}
+
+function building(caseX, caseY) {
+    if (map[selectedY][selectedX] == 0) {
+        var enceinte = game.add.image((-35*caseY) + (39.7 * caseX) + 325, (14 + 17*caseX) + (17.2 * caseY) + 45, "enceinte");
+        enceinte.scale.setTo(0.1,0.1);
+        enceinte.name = caseX + "-" + caseY;
+        map[selectedY][selectedX] = 5;
+    }
+}
+
+
+function scaleSort(a, b) {
+    if (a.scale.x < b.scale.x)
+    {
+        return -1;
+    }
+    else if (a.scale.x > b.scale.x)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+function checkGoat(){
+    if (goats.length > 100) {
+        console.log(goats);
+        goats.forEach(partyGoat);
+    }
+}
+
+function partyGoat(caseX, caseY) {
+    var posX = this.caseX;
+    var posY = this.caseY;
+    if (map[(caseY -1)][(caseX -1)] == 5) {
+        console.log("case -1 -1 proc");
+    }
+}
+
+function recycle() {
 
 }
