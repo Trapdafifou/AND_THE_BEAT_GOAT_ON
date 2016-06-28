@@ -1,5 +1,5 @@
 // Prise en charge de l'audio de la page
-window.PhaserGlobal = { disableWebAudio: true };
+window.PhaserGlobal = {disableWebAudio: true};
 
 // Création de l'instance du jeu
 var game = new Phaser.Game(900, 600, Phaser.CANVAS, 'phaser-example', {
@@ -12,13 +12,13 @@ var game = new Phaser.Game(900, 600, Phaser.CANVAS, 'phaser-example', {
 function preload() {
     // Préchargement du jeu
     game.load.image('tuile', 'case-xs-light.png');
-    game.load.image("background", "background.png");
+    game.load.image("background", "carte.png");
     game.load.image('cadre', 'cadre.png');
     game.load.image('exit', 'exit.png');
     game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
     game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
     game.load.audio('vide', ['assets/audio/goaman_intro.mp3', 'assets/audio/goaman_intro.ogg']);
-    game.load.spritesheet('sprite', 'goat.png', 120, 130, 80);
+    game.load.spritesheet('sprite', 'goat.png', 47.3, 52, 3);
 
 }
 
@@ -40,24 +40,24 @@ var videSong;
 var music;
 var goat;
 var goats;
-var posY = 200;
+var goatX = (-35 * 1) + (39.7 * 1);
+var goatY = (14 + 17 * 1) + (17.2 * 1);
+var counter = 0;
 
 
 function create() {
 
     // Ajout de la map
-    var bkg = game.add.sprite(0,0,"background");
+    var bkg = game.add.sprite(0, 0, "background");
 
     // Création de la grille de cases
-    for (var j = 0; j < 10; j++)
-    {
-        for (var i = 0; i < 14; i++)
-        {
+    for (var j = 0; j < 10; j++) {
+        for (var i = 0; i < 14; i++) {
             // Décallage a chaque itération pour adapter a l'isometric
-            button = game.add.button((-35*j) + (40 * i) + 388, (15 + 17.2*i) + (18 * j) + 183, 'tuile', openWindow, this, 2, 1, 0);
+            button = game.add.button((-35 * j) + (39.7 * i) + 325, (14 + 17 * i) + (17.2 * j) + 65, 'tuile', openWindow, this, 2, 1, 0);
             button.name = 'X' + i + '-Y' + j;
-            button.caseX = i;
-            button.caseY = j;
+            console.log(goatX.caseX)
+            goatY.caseY = j;
             button.input.useHandCursor = true;
             button.alpha = 0;
             button.events.onInputDown.add(onDown, this);
@@ -87,7 +87,7 @@ function create() {
     popup.scale.set(0.1);
 
     // Style CSS du texte du popup
-    var style = { font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth:500 };
+    var style = {font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: 500};
 
     // Ajout des texts du popup
     musicText = game.add.text(0, 0, "", style);
@@ -112,15 +112,15 @@ function create() {
 
     // Création des goats
     goats = game.add.group();
-    function createGoats() {
+    function createGoats(wave) {
         // createGoats generate the goats.
-        for (var i = 0; i <= 8; i++) {
-            goat = goats.create(game.world.centerX, game.world.top, 'sprite');
+        for (var i = 0; i <= wave; i++) {
+            goat = goats.create(305, 90 , 'sprite');
             goat.scale.setTo(0.5, 0.5);
-            console.log(goat)
         }
     }
-    game.time.events.loop(Phaser.Timer.SECOND * 2, createGoats, this)
+
+    createGoats(3);
 
 
     // Grille de debug 100x100
@@ -131,14 +131,13 @@ function create() {
 function openWindow() {
 
     // Animation elastique d'ouverture
-    if ((tween !== null && tween.isRunning) || popup.scale.x === 1)
-    {
+    if ((tween !== null && tween.isRunning) || popup.scale.x === 1) {
         return;
     }
 
     //  Agrandit la fenêtre si elle n'est pas déjà ouverte
-    tween = game.add.tween(popup.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out, true);
-    setTimeout(function() {
+    tween = game.add.tween(popup.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out, true);
+    setTimeout(function () {
         musicText.alpha = 1;
         musicText2.alpha = 1;
     }, 400);
@@ -149,16 +148,15 @@ function openWindow() {
 // Fermeture de la popup
 function closeWindow() {
 
-    if (tween && tween.isRunning || popup.scale.x === 0.1)
-    {
+    if (tween && tween.isRunning || popup.scale.x === 0.1) {
         return;
     }
 
     //  Ferme la fenêtre si elle n'est pas déjà fermée
-    tween = game.add.tween(popup.scale).to( { x: 0.1, y: 0.1 }, 500, Phaser.Easing.Elastic.In, true);
+    tween = game.add.tween(popup.scale).to({x: 0.1, y: 0.1}, 500, Phaser.Easing.Elastic.In, true);
     musicText.alpha = 0;
     musicText2.alpha = 0;
-    setTimeout(function() {
+    setTimeout(function () {
         popup.alpha = 0;
     }, 500);
     selectedSong = "";
@@ -167,7 +165,7 @@ function closeWindow() {
 
 
 // Activation d'une case
-function onDown (sprite) {
+function onDown(sprite) {
 
     text = "onDown: " + sprite.name;
     selectedX = sprite.caseX;
@@ -187,7 +185,7 @@ function onDown (sprite) {
 }
 
 // Survol d'une case
-function onOver (sprite) {
+function onOver(sprite) {
 
     text = "onOver: " + sprite.name;
 
@@ -197,7 +195,7 @@ function onOver (sprite) {
 }
 
 // Souris sortie de la case
-function onOut (sprite) {
+function onOut(sprite) {
 
     text = "onOut: " + sprite.name;
 
@@ -217,29 +215,50 @@ function update() {
     musicText2.y = Math.floor(popup.y + musicText.height / 2) - 60;
     musicText2.text = selectedX + " - " + selectedY + " - " + selectedSong;
 
-    // Déplacement des goats
-    setTimeout(function(){
-        goats.forEach(function () {
-            goat.y += 0.1;
-        });
-        if(goat.y >= 600-130 ){
-            goat.y += 0;
-            goat.y = 0;
-            goat.kill()
-        }
-    },2000);
-
 }
-
+function moveIt(){
+    var rightG = {
+        x : 45,
+        y : 20
+    };
+    var leftG = {
+        x : -40,
+        y : -20
+    };
+    var downG =  {
+        x : -35,
+        y : 20
+    };
+        setInterval(function () {
+            counter++;
+            console.log(counter);
+            if (counter <= 1) {
+                goat.x += rightG.x;
+                goat.y += rightG.y;
+            }
+            else if (counter > 1 && counter <= 3) {
+                goat.x += downG.x;
+                goat.y += downG.y;
+            }
+            if(counter >3 && counter <=4 ){
+                goat.x += leftG.x;
+                goat.y += leftG.y;
+            }
+            else if(counter > 4 && counter <= 6){
+                goat.x += downG.x;
+                goat.y += downG.y;
+            }
+            
+        }, 1000);
+}
+moveIt();
 // Affichages d'états pour le débugging
 function render() {
 
-    if (text === '')
-    {
+    if (text === '') {
         game.debug.text("Interact with the Sprites.", 32, 32);
     }
-    else
-    {
+    else {
         game.debug.text(text, 32, 32);
         game.debug.text(selectedX + " - " + selectedY + " - " + selectedSong, 32, 62);
     }
@@ -250,21 +269,19 @@ function render() {
 function dragDrop(obj) {
     obj.inputEnabled = true;
     obj.input.enableDrag();
-    obj.input.enableSnap(30,15,true,true);
-    obj.input.enableSnap(45,30,true,true);
+    obj.input.enableSnap(30, 15, true, true);
+    obj.input.enableSnap(45, 30, true, true);
 };
 
 // Gestion de la musique jouée
 function changeVolume(pointer) {
 
-    if (selectedSong == "guetta")
-    {
+    if (selectedSong == "guetta") {
         bobSong.pause();
         videSong.pause();
         guettaSong.resume();
     }
-    else if (selectedSong == "bob")
-    {
+    else if (selectedSong == "bob") {
         guettaSong.pause();
         videSong.pause();
         bobSong.resume();
