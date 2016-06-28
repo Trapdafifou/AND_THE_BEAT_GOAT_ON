@@ -18,7 +18,11 @@ function preload() {
     game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
     game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
     game.load.audio('vide', ['assets/audio/goaman_intro.mp3', 'assets/audio/goaman_intro.ogg']);
-    game.load.spritesheet('sprite', 'goat.png', 47.3, 52, 3);
+    game.load.image('sprite', 'chevresright.png');
+    game.load.image('spriteLeft', 'chevres.png');
+    game.load.image('spriteUpLeft', 'chevresUpLeft.png');
+    game.load.image('spriteUpRight', 'chevresUpRight.png')
+
 
 }
 
@@ -116,7 +120,7 @@ function create() {
         // createGoats generate the goats.
         for (var i = 0; i <= wave; i++) {
             goat = goats.create(305, 90 , 'sprite');
-            goat.scale.setTo(0.5, 0.5);
+            goat.scale.setTo(0.07, 0.07);
         }
     }
 
@@ -235,102 +239,127 @@ function moveIt(){
             if (counter <= 1) {
                 goat.x += rightG.x;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             else if (counter > 1 && counter <= 3) {
                 goat.x += downG.x;
                 goat.y += downG.y;
+                goat.loadTexture('spriteLeft');
             }
             if(counter >3 && counter <=4 ){
                 goat.x += leftG.x;
                 goat.y += leftG.y;
+                goat.loadTexture('spriteUpLeft');
             }
             else if(counter > 4 && counter <= 6){
                 goat.x += downG.x;
                 goat.y += downG.y;
+                goat.loadTexture('spriteLeft');
             }
             if(counter > 6 && counter <=7 ){
                 goat.x += rightG.x;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             else if(counter > 7 && counter <= 9){
                 goat.x += downG.x;
                 goat.y += downG.y;
+                goat.loadTexture('spriteLeft');
             }
             if(counter > 9 && counter <= 11){
                 goat.x += rightG.x;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             else if(counter > 11 && counter <= 12){
                 goat.x += -downG.x;
                 goat.y += -downG.y;
+                goat.loadTexture('spriteUpRight');
             }
             if(counter > 12 && counter <= 13){
                 goat.x += rightG.x+15;
                 goat.y += rightG.y-3;
+                goat.loadTexture('sprite');
             }
            else if(counter > 13 && counter <= 16){
                 goat.x += -downG.x;
                 goat.y += -downG.y;
+                goat.loadTexture('spriteUpRight');
             }
             if(counter > 16 && counter <= 17){
                 goat.x += leftG.x;
                 goat.y += leftG.y;
+                goat.loadTexture('spriteUpLeft');
             }
             else if(counter > 17 && counter <= 19){
                 goat.x += -downG.x;
                 goat.y += -downG.y;
+                goat.loadTexture('spriteUpRight');
             }
             if(counter > 19 && counter <= 22){
                 goat.x += rightG.x+10;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             else if(counter > 22 && counter <= 27){
                 goat.x += downG.x-1;
                 goat.y += downG.y;
+                goat.loadTexture('spriteLeft');
             }
             if(counter > 27 && counter <= 29){
                 goat.x += rightG.x;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             else if(counter > 29 && counter <= 31){
                 goat.x += -downG.x;
                 goat.y += -downG.y;
+                goat.loadTexture('spriteUpRight');
             }
             if(counter > 31 && counter <= 33){
                 goat.x += rightG.x+2;
                 goat.y += rightG.y-5;
+                goat.loadTexture('sprite');
             }
             else if(counter > 33 && counter <= 35){
                 goat.x += -downG.x;
                 goat.y += -downG.y;
+                goat.loadTexture('spriteUpRight');
             }
             if(counter > 35 && counter <= 37){
                 goat.x += leftG.x;
                 goat.y += leftG.y;
+                goat.loadTexture('spriteUpLeft');
             }
             else if(counter > 37 && counter <= 39){
                 goat.x += -downG.x;
                 goat.y += -downG.y;
+                goat.loadTexture('spriteUpRight');
             }
             if(counter > 39 && counter <= 43){
                 goat.x += rightG.x;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             else if(counter > 43 && counter <= 49){
                 goat.x += downG.x;
                 goat.y += downG.y;
+                goat.loadTexture('spriteLeft');
             }
             if(counter > 49 && counter <= 51){
                 goat.x += leftG.x;
                 goat.y += leftG.y;
+                goat.loadTexture('spriteUpLeft');
             }
             else if(counter > 51 && counter <= 53){
                 goat.x += downG.x;
                 goat.y += downG.y;
+                goat.loadTexture('spriteLeft');
             }
             if(counter > 53 && counter <= 56){
                 goat.x += rightG.x;
                 goat.y += rightG.y;
+                goat.loadTexture('sprite');
             }
             if(counter==56){
                 clearInterval(this);
