@@ -220,18 +220,19 @@ function update() {
     musicText2.text = selectedX + " - " + selectedY + " - " + selectedSong;
 
 }
+
 function moveIt(){
-    var rightG = {
-        x : 34,
-        y : 18
-    };
-    var leftG = {
-        x : -38,
-        y : -18
-    };
-    var downG =  {
-        x : -33,
-        y : 18
+        var rightG = {
+            x : 34,
+            y : 18
+        };
+        var leftG = {
+            x : -38,
+            y : -18
+        };
+        var downG =  {
+            x : -33,
+            y : 18
     };
         setInterval(function () {
             counter++;
@@ -356,7 +357,7 @@ function moveIt(){
                 goat.y += downG.y;
                 goat.loadTexture('spriteLeft');
             }
-            if(counter > 53 && counter <= 56){
+            if(counter > 53 && counter <= 57){
                 goat.x += rightG.x;
                 goat.y += rightG.y;
                 goat.loadTexture('sprite');
@@ -368,8 +369,31 @@ function moveIt(){
             }
 
         }, 500);
+    var tabGoat = [];
+
 }
 moveIt();
+var thisGoat = function(sprite, style){
+    /**
+     * string
+     * define type of song
+     */
+    this.style = style;
+    /**
+     * integer
+     * define position X
+     */
+    this.caseX = caseX;
+    /**
+     * integer
+     * define position Y
+     */
+    this.caseY = caseY;
+
+
+    
+
+};
 // Affichages d'états pour le débugging
 function render() {
 
