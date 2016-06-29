@@ -15,16 +15,18 @@ function preload() {
     game.load.image("background", "carte.png");
     game.load.image('cadre', 'cadre.png');
     game.load.image('enceinte', 'enceinte.png');
+    game.load.image('rap', 'enceinte-jaune.png');
+    game.load.image('metal', 'enceinte-rouge.png');
+    game.load.image('regge', 'enceinte-bleu.png');
     game.load.image('pluie', 'pluie.png');
     game.load.image('tornade', 'tornade.png');
     game.load.image('exit', 'exit.png');
     game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
     game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
-    game.load.audio('vide', ['assets/audio/goaman_intro.mp3', 'assets/audio/goaman_intro.ogg']);
-    game.load.image('sprite', 'chevresright.png');
-    game.load.image('spriteLeft', 'chevres.png');
-    game.load.image('spriteUpLeft', 'chevresUpLeft.png');
-    game.load.image('spriteUpRight', 'chevresUpRight.png')
+    game.load.image('goat-rightdown', 'chevresright.png');
+    game.load.image('goat-leftdown', 'chevres.png');
+    game.load.image('goat-leftup', 'chevresUpLeft.png');
+    game.load.image('goat-rightup', 'chevresUpRight.png');
     game.load.spritesheet('rain', 'assets/rain.png', 17, 17);
     game.load.image('smoke', 'smoke-puff.png');
 
@@ -47,6 +49,7 @@ var map = [
     [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0   ],
 ];
 
+var score;
 var button;
 var enceintes;
 var popup;
@@ -65,8 +68,6 @@ var videSong;
 var music;
 var goat;
 var goats;
-var goatX = (-35 * 1) + (39.7 * 1);
-var goatY = (14 + 17 * 1) + (17.2 * 1);
 var counter = 0;
 var core = {};
 var emitter;
@@ -96,75 +97,141 @@ function create() {
         }
     }
 
-    //  Fenêtre de profil de la case
-    popup = game.add.sprite(200, 200, 'cadre');
-    popup.alpha = 0.8;
-    popup.anchor.set(0.5);
-    popup.inputEnabled = true;
-    // Permet le déplacement
-    popup.input.enableDrag();
-    popup.alpha = 0;
-    // Placement de la croix de fermeture en haut à droite
-    var pw = (popup.width / 2) - 30;
-    var ph = (popup.height / 2) - 8;
-    var closeButton = game.make.sprite(pw, -ph, 'exit');
-    closeButton.scale.setTo(0.2, 0.2);
-    closeButton.inputEnabled = true;
-    closeButton.input.priorityID = 1;
-    closeButton.input.useHandCursor = true;
-    closeButton.events.onInputDown.add(closeWindow, this);
-    popup.addChild(closeButton);
-    popup.scale.set(0.1);
-
-    // Style CSS du texte du popup
-    var style = {font: "32px Arial", fill: "#ff0044", wordWrap: true, wordWrapWidth: 500};
-
-    // Ajout des texts du popup
-    musicText = game.add.text(0, 0, "", style);
-    musicText.anchor.set(0.5);
-    musicText.alpha = 0;
-    musicText2 = game.add.text(0, 0, "", style);
-    musicText2.anchor.set(0.5);
-    musicText2.alpha = 0;
-
-    // Chargement des sons dans le navigateur
-    bobSong = game.add.audio('bob');
-    guettaSong = game.add.audio('guetta');
-    videSong = game.add.audio('vide');
-    videSong.play();
-    guettaSong.play();
-    bobSong.play();
-    bobSong.pause();
-    guettaSong.pause();
 
     // Passage en mode constructeur
-    var enceinte = game.add.button(50, 450, 'enceinte', buildMode, this, 2, 1, 0);
-    enceinte.scale.setTo(0.2,0.2);
+    var boutonRegge = game.add.button(50, 450, 'regge', buildRegge, this, 2, 1, 0);
+    boutonRegge.scale.setTo(0.2,0.2);
 
     // Passage en mode pluie
-    var meteo = game.add.button(50, 350, 'pluie', rainMode, this, 2, 1, 0);
-    meteo.scale.setTo(0.3,0.3);
+    var boutonMetal = game.add.button(50, 350, 'metal', buildMetal, this, 2, 1, 0);
+    boutonMetal.scale.setTo(0.2,0.2);
 
     // Passage en mode tempête de vomi
-    var tornade = game.add.button(150, 450, 'tornade', vomiMode, this, 2, 1, 0);
-    tornade.scale.setTo(0.1,0.1);
+    var boutonRap = game.add.button(150, 450, 'rap', buildRap, this, 2, 1, 0);
+    boutonRap.scale.setTo(0.2,0.2);
 
-
-    // Update de la musique si necessaire au click
-    game.input.onDown.add(changeVolume, this);
 
     // Création des goats
     goats = game.add.group();
-    function createGoats(wave) {
-        // createGoats generate the goats.
-        for (var i = 0; i <= wave; i++) {
-            goat = goats.create(305, 90 , 'sprite');
-            goat.scale.setTo(0.07, 0.07);
+
+    function createGoat() {
+
+        goat = goats.create(305, 90 , 'goat-rightdown');
+        goat.scale.setTo(0.07, 0.07);
+        goat.caseX = 0;
+        goat.caseY = 1;
+        goat.lastX = 0;
+        goat.lastY = 0;
+
+
+
+        // Déplacement du sprite au mouvement de la chèvre
+        var moveLeft= function(goat) {
+            goat.x -= 38;
+            goat.y -= 13;
+        };
+
+        var moveRight = function(goat) {
+            goat.x += 37;
+            goat.y += 13;
+        };
+
+        var moveUp = function(goat) {
+            goat.x += 35;
+            goat.y -= 17;
+        };
+
+        var moveDown = function(goat) {
+            goat.x -= 33;
+            goat.y += 20;
+        };
+
+        var actionGoat = function(caseX, caseY, lastX, lastY) {
+
+            // Détection d'une enceinte Regge
+            if (map[caseY + 1][caseX - 1] == 5) { // Bas gauche
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY + 1][caseX] == 5) { // Bas
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY + 1][caseX + 1] == 5) { // Bas droite
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY][caseX - 1] == 5) { // Gauche
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY][caseX + 1] == 5) { // Droite
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY - 1][caseX - 1] == 5) { // Haut gauche
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY - 1][caseX] == 5) { // Haut
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }
+            if (map[caseY - 1][caseX + 1] == 5) { // Haut droite
+                goat.kill();
+                console.log("Goat absorbée. Vive le " + core.etat + " !!")
+            }            
+
+
+            // Déplacement sur une case libre
+            // Retour en arriere empeché
+            // Droite
+            if (map[caseY][caseX + 1] == 1 && (caseX + 1 !== lastX)) {
+                moveRight(goat);
+                goat.loadTexture('goat-rightdown');
+                goat.lastX = goat.caseX;
+                goat.lastY = goat.caseY;
+                goat.caseX +=1;
+            // Bas
+            } else if (map[caseY + 1][caseX] == 1 && (caseY + 1 !== lastY)) {
+                moveDown(goat);
+                goat.loadTexture('goat-leftdown');
+                goat.lastX = goat.caseX;
+                goat.lastY = goat.caseY;
+                goat.caseY +=1;
+            // Gauche
+            } else if (map[caseY][caseX - 1] == 1 && (caseX - 1 !== lastX)) {
+                moveLeft(goat);
+                goat.loadTexture('goat-leftup');
+                goat.lastX = goat.caseX;
+                goat.lastY = goat.caseY;
+                goat.caseX -=1;
+            // Haut
+            } else if (map[caseY - 1][caseX] == 1 && (caseY - 1 !== lastY)) {
+                moveUp(goat);
+                goat.loadTexture('goat-rightup');
+                goat.lastX = goat.caseX;
+                goat.lastY = goat.caseY;
+                goat.caseY -=1;
+            // On bute la chevre à l'arrivée
+            } else if (caseX == 13 && caseY == 8) {
+                goat.kill();
+            }
+            setTimeout(function() {
+                actionGoat(goat.caseX, goat.caseY, goat.lastX, goat.lastY);
+            }, 500);
         }
+
+        actionGoat(goat.caseX, goat.caseY);
+
+        setTimeout(function() {
+            createGoat();
+        }, 500);    
+
     }
+    createGoat();
 
-    createGoats(3);
-
+    
 
     // Grille de debug 100x100
     game.add.sprite(0, 0, game.create.grid('grid', 100 * 9, 100 * 6, 100, 100, 'rgba(0, 250, 0, 1)'));
@@ -247,14 +314,20 @@ function closeWindow() {
 function onDown(sprite) {
 
 
-        text = "onDown: " + sprite.name;
-        selectedX = sprite.caseX;
-        selectedY = sprite.caseY;
-        sprite.tint = 0xff0000;
+    text = "onDown: " + sprite.name;
+    selectedX = sprite.caseX;
+    selectedY = sprite.caseY;
+    sprite.tint = 0xff0000;
 
-        if (core.etat == "builder" && map[selectedY][selectedX] == 0) {
-            building(selectedX, selectedY);
-        }
+    if (core.etat == "rap" && map[selectedY][selectedX] == 0) {
+        building(selectedX, selectedY, "rap");
+    }
+    if (core.etat == "metal" && map[selectedY][selectedX] == 0) {
+        building(selectedX, selectedY, "metal");
+    }
+    if (core.etat == "regge" && map[selectedY][selectedX] == 0) {
+        building(selectedX, selectedY, "regge");
+    }
 
 
 }
@@ -262,10 +335,10 @@ function onDown(sprite) {
 // Survol d'une case
 function onOver(sprite) {
 
-    if (core.etat == "builder" && map[sprite.caseY][sprite.caseX] == 0) {
+    if (core.etat !== "repos" && map[sprite.caseY][sprite.caseX] == 0) {
         sprite.alpha = 1;
         sprite.tint = 0x00ff00;
-    } else if (core.etat == "builder") {
+    } else if (core.etat !== "repos") {
         sprite.alpha = 1;
         sprite.tint = 0xff0000;
     }
@@ -286,179 +359,14 @@ function onOut(sprite) {
 // Mise à jour des données du jeu
 function update() {
 
-    // Suivi des texts d'information sur le popup
-    musicText.x = Math.floor(popup.x + musicText.width / 2) - 120;
-    musicText.y = Math.floor(popup.y + musicText.height / 2) - 80;
-    musicText.text = selectedSong;
-    musicText2.x = Math.floor(popup.x + musicText.width / 2) - 120;
-    musicText2.y = Math.floor(popup.y + musicText.height / 2) - 60;
-    musicText2.text = selectedX + " - " + selectedY + " - " + selectedSong;
-
     // random vomi
     smoke.customSort(scaleSort, this);
 
     // checkGoat();
 }
-function moveIt(){
-    var rightG = {
-        x : 34,
-        y : 18
-    };
-    var leftG = {
-        x : -38,
-        y : -18
-    };
-    var downG =  {
-        x : -33,
-        y : 18
-    };
-        setInterval(function () {
-            counter++;
-            console.log(counter);
-            if (counter <= 1) {
-                goat.x += rightG.x;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            else if (counter > 1 && counter <= 3) {
-                goat.x += downG.x;
-                goat.y += downG.y;
-                goat.loadTexture('spriteLeft');
-            }
-            if(counter >3 && counter <=4 ){
-                goat.x += leftG.x;
-                goat.y += leftG.y;
-                goat.loadTexture('spriteUpLeft');
-            }
-            else if(counter > 4 && counter <= 6){
-                goat.x += downG.x;
-                goat.y += downG.y;
-                goat.loadTexture('spriteLeft');
-            }
-            if(counter > 6 && counter <=7 ){
-                goat.x += rightG.x;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            else if(counter > 7 && counter <= 9){
-                goat.x += downG.x;
-                goat.y += downG.y;
-                goat.loadTexture('spriteLeft');
-            }
-            if(counter > 9 && counter <= 11){
-                goat.x += rightG.x;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            else if(counter > 11 && counter <= 12){
-                goat.x += -downG.x;
-                goat.y += -downG.y;
-                goat.loadTexture('spriteUpRight');
-            }
-            if(counter > 12 && counter <= 13){
-                goat.x += rightG.x+15;
-                goat.y += rightG.y-3;
-                goat.loadTexture('sprite');
-            }
-           else if(counter > 13 && counter <= 16){
-                goat.x += -downG.x;
-                goat.y += -downG.y;
-                goat.loadTexture('spriteUpRight');
-            }
-            if(counter > 16 && counter <= 17){
-                goat.x += leftG.x;
-                goat.y += leftG.y;
-                goat.loadTexture('spriteUpLeft');
-            }
-            else if(counter > 17 && counter <= 19){
-                goat.x += -downG.x;
-                goat.y += -downG.y;
-                goat.loadTexture('spriteUpRight');
-            }
-            if(counter > 19 && counter <= 22){
-                goat.x += rightG.x+10;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            else if(counter > 22 && counter <= 27){
-                goat.x += downG.x-1;
-                goat.y += downG.y;
-                goat.loadTexture('spriteLeft');
-            }
-            if(counter > 27 && counter <= 29){
-                goat.x += rightG.x;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            else if(counter > 29 && counter <= 31){
-                goat.x += -downG.x;
-                goat.y += -downG.y;
-                goat.loadTexture('spriteUpRight');
-            }
-            if(counter > 31 && counter <= 33){
-                goat.x += rightG.x+2;
-                goat.y += rightG.y-5;
-                goat.loadTexture('sprite');
-            }
-            else if(counter > 33 && counter <= 35){
-                goat.x += -downG.x;
-                goat.y += -downG.y;
-                goat.loadTexture('spriteUpRight');
-            }
-            if(counter > 35 && counter <= 37){
-                goat.x += leftG.x;
-                goat.y += leftG.y;
-                goat.loadTexture('spriteUpLeft');
-            }
-            else if(counter > 37 && counter <= 39){
-                goat.x += -downG.x;
-                goat.y += -downG.y;
-                goat.loadTexture('spriteUpRight');
-            }
-            if(counter > 39 && counter <= 43){
-                goat.x += rightG.x;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            else if(counter > 43 && counter <= 49){
-                goat.x += downG.x;
-                goat.y += downG.y;
-                goat.loadTexture('spriteLeft');
-            }
-            if(counter > 49 && counter <= 51){
-                goat.x += leftG.x;
-                goat.y += leftG.y;
-                goat.loadTexture('spriteUpLeft');
-            }
-            else if(counter > 51 && counter <= 53){
-                goat.x += downG.x;
-                goat.y += downG.y;
-                goat.loadTexture('spriteLeft');
-            }
-            if(counter > 53 && counter <= 56){
-                goat.x += rightG.x;
-                goat.y += rightG.y;
-                goat.loadTexture('sprite');
-            }
-            if(counter==56){
-                clearInterval(this);
-                counter += 0;
-                goat.kill();
-            }
 
-        }, 500);
-}
-moveIt();
 // Affichages d'états pour le débugging
 function render() {
-
-    if (text === '') {
-        game.debug.text("Interact with the Sprites.", 32, 32);
-    }
-    else {
-        game.debug.text(text, 32, 32);
-        game.debug.text(selectedX + " - " + selectedY + " - " + selectedSong, 32, 62);
-    }
 
 }
 
@@ -470,6 +378,8 @@ function dragDrop(obj) {
     obj.input.enableSnap(45, 30, true, true);
 };
 
+
+/*
 // Gestion de la musique jouée
 function changeVolume(pointer) {
 
@@ -489,43 +399,48 @@ function changeVolume(pointer) {
     }
     nowPlaying = selectedSong;
 
-}
+}*/
 
 
-function buildMode() {
-    if (core.etat == "builder") {
-        core.etat = "repos";
+function buildRap() {
+    if (core.etat == "repos") {
+        core.etat = "rap";
     } else {
-        core.etat = "builder";
+        core.etat = "rap";
     }
 }
 
-function rainMode() {
-    if (core.meteo == "pluie") {
-        core.meteo = "sec";
-        emitter.alpha = 0;
+function buildMetal() {
+    if (core.etat == "repos") {
+        core.etat = "metal";
     } else {
-        core.meteo = "pluie";
-        emitter.alpha = 1;
+        core.etat = "metal";
     }
 }
 
-function vomiMode() {
-    if (core.vomi == "sec") {
-        core.vomi = "vomi";
-        smoke.alpha = 0;
+function buildRegge() {
+    if (core.etat == "repos") {
+        core.etat = "regge";
     } else {
-        core.vomi = "sec";
-        smoke.alpha = 1;
+        core.etat = "regge";
     }
 }
 
 function building(caseX, caseY) {
     if (map[selectedY][selectedX] == 0) {
-        var enceinte = game.add.image((-35*caseY) + (39.7 * caseX) + 325, (14 + 17*caseX) + (17.2 * caseY) + 45, "enceinte");
+        var enceinte = game.add.image((-35*caseY) + (39.7 * caseX) + 325, (14 + 17*caseX) + (17.2 * caseY) + 45, core.etat);
+        // Enceinte minifiée
         enceinte.scale.setTo(0.1,0.1);
         enceinte.name = caseX + "-" + caseY;
-        map[selectedY][selectedX] = 5;
+        // Sauvegarde dans le tableau map
+        if (core.etat == "rap") {
+            map[selectedY][selectedX] = 3;    
+        } else if (core.etat == "metal") {
+            map[selectedY][selectedX] = 4;    
+        } else if (core.etat == "regge") {
+            map[selectedY][selectedX] = 5;    
+        }
+        
     }
 }
 
