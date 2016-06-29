@@ -37,6 +37,7 @@ function preload() {
 // 1 case chemin
 // 2 3 4 5 Cases enceintes
 var map = [
+    [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0   ],
     [   0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  0   ],
     [   1,  1,  0,  1,  1,  1,  1,  0,  1,  0,  0,  0,  1,  0   ],
     [   0,  1,  0,  1,  0,  0,  1,  0,  1,  1,  1,  0,  1,  0   ],
@@ -67,6 +68,10 @@ var guettaSong;
 var videSong;
 var music;
 var goat;
+var capaciteSite = 200;
+var tableGoat = [];
+var goat1;
+var goat2;
 var goats;
 var counter = 0;
 var core = {};
@@ -114,127 +119,17 @@ function create() {
     // Création des goats
     goats = game.add.group();
 
-    function createGoat() {
-
-        goat = goats.create(305, 90 , 'goat-rightdown');
-        goat.scale.setTo(0.07, 0.07);
-        goat.caseX = 0;
-        goat.caseY = 1;
-        goat.lastX = 0;
-        goat.lastY = 0;
-
-
-
-        // Déplacement du sprite au mouvement de la chèvre
-        var moveLeft= function(goat) {
-            goat.x -= 38;
-            goat.y -= 13;
-        };
-
-        var moveRight = function(goat) {
-            goat.x += 37;
-            goat.y += 13;
-        };
-
-        var moveUp = function(goat) {
-            goat.x += 35;
-            goat.y -= 17;
-        };
-
-        var moveDown = function(goat) {
-            goat.x -= 33;
-            goat.y += 20;
-        };
-
-        var actionGoat = function(caseX, caseY, lastX, lastY) {
-
-            // Détection d'une enceinte Regge
-            if (map[caseY + 1][caseX - 1] == 5) { // Bas gauche
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY + 1][caseX] == 5) { // Bas
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY + 1][caseX + 1] == 5) { // Bas droite
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY][caseX - 1] == 5) { // Gauche
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY][caseX + 1] == 5) { // Droite
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY - 1][caseX - 1] == 5) { // Haut gauche
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY - 1][caseX] == 5) { // Haut
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }
-            if (map[caseY - 1][caseX + 1] == 5) { // Haut droite
-                goat.kill();
-                console.log("Goat absorbée. Vive le " + core.etat + " !!")
-            }            
-
-
-            // Déplacement sur une case libre
-            // Retour en arriere empeché
-            // Droite
-            if (map[caseY][caseX + 1] == 1 && (caseX + 1 !== lastX)) {
-                moveRight(goat);
-                goat.loadTexture('goat-rightdown');
-                goat.lastX = goat.caseX;
-                goat.lastY = goat.caseY;
-                goat.caseX +=1;
-            // Bas
-            } else if (map[caseY + 1][caseX] == 1 && (caseY + 1 !== lastY)) {
-                moveDown(goat);
-                goat.loadTexture('goat-leftdown');
-                goat.lastX = goat.caseX;
-                goat.lastY = goat.caseY;
-                goat.caseY +=1;
-            // Gauche
-            } else if (map[caseY][caseX - 1] == 1 && (caseX - 1 !== lastX)) {
-                moveLeft(goat);
-                goat.loadTexture('goat-leftup');
-                goat.lastX = goat.caseX;
-                goat.lastY = goat.caseY;
-                goat.caseX -=1;
-            // Haut
-            } else if (map[caseY - 1][caseX] == 1 && (caseY - 1 !== lastY)) {
-                moveUp(goat);
-                goat.loadTexture('goat-rightup');
-                goat.lastX = goat.caseX;
-                goat.lastY = goat.caseY;
-                goat.caseY -=1;
-            // On bute la chevre à l'arrivée
-            } else if (caseX == 13 && caseY == 8) {
-                goat.kill();
-            }
-            setTimeout(function() {
-                actionGoat(goat.caseX, goat.caseY, goat.lastX, goat.lastY);
-            }, 500);
-        }
-
-        actionGoat(goat.caseX, goat.caseY);
-
-        setTimeout(function() {
-            createGoat();
-        }, 500);    
-
-    }
-    createGoat();
 
     
+    setInterval(function() {
+        goat = createGoat();
+    }, 1000);
+
+
+
 
     // Grille de debug 100x100
-    game.add.sprite(0, 0, game.create.grid('grid', 100 * 9, 100 * 6, 100, 100, 'rgba(0, 250, 0, 1)'));
+    // game.add.sprite(0, 0, game.create.grid('grid', 100 * 9, 100 * 6, 100, 100, 'rgba(0, 250, 0, 1)'));
 
 
 
@@ -361,6 +256,9 @@ function update() {
 
     // random vomi
     smoke.customSort(scaleSort, this);
+    for (var i = 0; i < tableGoat.length; i++) {
+        actionGoat(tableGoat[i]);
+    }
 
     // checkGoat();
 }
@@ -476,5 +374,126 @@ function partyGoat(caseX, caseY) {
 }
 
 function recycle() {
+
+}
+
+
+
+
+
+// Déplacement du sprite au mouvement de la chèvre
+var moveLeft= function(goat) {
+    goat.x -= 38;
+    goat.y -= 13;
+};
+
+var moveRight = function(goat) {
+    goat.x += 37;
+    goat.y += 13;
+};
+
+var moveUp = function(goat) {
+    goat.x += 35;
+    goat.y -= 17;
+};
+
+var moveDown = function(goat) {
+    goat.x -= 33;
+    goat.y += 20;
+};
+
+var actionGoat = function(goat) {
+    if (goat.fatigue == 1) {
+        return null;
+    }
+    // Détection d'une enceinte Regge
+    if (map[goat.caseY + 1][goat.caseX - 1] == 5) { // Bas gauche
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY + 1][goat.caseX] == 5) { // Bas
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY + 1][goat.caseX + 1] == 5) { // Bas droite
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY][goat.caseX - 1] == 5) { // Gauche
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY][goat.caseX + 1] == 5) { // Droite
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY - 1][goat.caseX - 1] == 5) { // Haut gauche
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY - 1][goat.caseX] == 5) { // Haut
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }
+    if (map[goat.caseY - 1][goat.caseX + 1] == 5) { // Haut droite
+        goat.kill();
+        console.log("Goat absorbée. Vive le " + core.etat + " !!")
+    }            
+
+
+
+    // Déplacement sur une case libre
+    // Retour en arriere empeché
+    // Droite
+    if (map[goat.caseY][goat.caseX + 1] == 1 && (goat.caseX + 1 !== goat.lastX)) {
+        moveRight(goat);
+        goat.loadTexture('goat-rightdown');
+        goat.lastX = goat.caseX;
+        goat.lastY = goat.caseY;
+        goat.caseX +=1;
+    // Bas
+    } else if (map[goat.caseY + 1][goat.caseX] == 1 && (goat.caseY + 1 !== goat.lastY)) {
+        moveDown(goat);
+        goat.loadTexture('goat-leftdown');
+        goat.lastX = goat.caseX;
+        goat.lastY = goat.caseY;
+        goat.caseY +=1;
+    // Gauche
+    } else if (map[goat.caseY][goat.caseX - 1] == 1 && (goat.caseX - 1 !== goat.lastX)) {
+        moveLeft(goat);
+        goat.loadTexture('goat-leftup');
+        goat.lastX = goat.caseX;
+        goat.lastY = goat.caseY;
+        goat.caseX -=1;
+    // Haut
+    } else if (map[goat.caseY - 1][goat.caseX] == 1 && (goat.caseY - 1 !== goat.lastY)) {
+        moveUp(goat);
+        goat.loadTexture('goat-rightup');
+        goat.lastX = goat.caseX;
+        goat.lastY = goat.caseY;
+        goat.caseY -=1;
+    // On bute la chevre à l'arrivée
+    } else if (goat.caseX == 13 && goat.caseY == 8) {
+        goat.kill();
+    }
+    goat.fatigue = 1;
+    setTimeout(function(){
+        goat.fatigue = 0;
+    }, (1 / goat.endurence) * 1000);
+
+};
+
+function createGoat() {
+
+    goat = goats.create(305, 90 , 'goat-rightdown');
+    goat.scale.setTo(0.07, 0.07);
+    goat.caseX = 0;
+    goat.caseY = 2;
+    goat.lastX = 0;
+    goat.lastY = 0;
+    goat.fatigue = 0;
+    goat.endurence = 2;
+    tableGoat.push(goat);
+    return goat;
 
 }
