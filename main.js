@@ -333,46 +333,34 @@ var actionGoat = function(goat) {
     // goat.style == 4 : regge
     // goat.style == 5 : metal
     if (map[goat.caseY + 1][goat.caseX - 1] == goat.style) { // Bas gauche
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY + 1][goat.caseX] == goat.style) { // Bas
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY + 1][goat.caseX + 1] == goat.style) { // Bas droite
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY][goat.caseX - 1] == goat.style) { // Gauche
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY][goat.caseX + 1] == goat.style) { // Droite
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY - 1][goat.caseX - 1] == goat.style) { // Haut gauche
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY - 1][goat.caseX] == goat.style) { // Haut
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }
     if (map[goat.caseY - 1][goat.caseX + 1] == goat.style) { // Haut droite
-        goat.kill();
-        core.score += goat.style;
-        console.log("Goat absorbée. Update du score : " + core.score + " !")
+        goat.moral += 5;
     }          
 
+    if (goat.moral > 200) {
+        goat.kill();
+        console.log("Elle a kiffé !");
+    }
 
     // Déplacement vers la prochaine case chemin à proximitée
     // Selection du visuel en fonction du style et de son trajet
@@ -470,6 +458,7 @@ function createGoat() {
     goat.lastX = 1;
     goat.lastY = 1;
     goat.fatigue = 0;
+    goat.moral = 100;
     goat.endurence = game.rnd.integerInRange(1, 3); // Endu aléatoire
     goat.style = game.rnd.integerInRange(3, 5); // Style musical aléatoire
     tableGoat.push(goat); // Ajout au tableau de goats
