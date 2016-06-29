@@ -23,10 +23,24 @@ function preload() {
     game.load.image('exit', 'exit.png');
     game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
     game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
+
+    // Chevre nue
     game.load.image('goat-rightdown', 'chevresright.png');
     game.load.image('goat-leftdown', 'chevres.png');
     game.load.image('goat-leftup', 'chevresUpLeft.png');
     game.load.image('goat-rightup', 'chevresUpRight.png');
+    
+    // Chevre bleue
+    game.load.image('goat-yellow-rightdown', 'chevresright-jaune.png');
+    game.load.image('goat-yellow-leftdown', 'chevres-jaune.png');
+    game.load.image('goat-yellow-leftup', 'chevresUpLeft-jaune.png');
+    game.load.image('goat-yellow-rightup', 'chevresUpRight-jaune.png');
+
+    // Chevre jaune
+    game.load.image('goat-blue-rightdown', 'chevresright-bleu.png');
+    game.load.image('goat-blue-leftdown', 'chevres-bleu.png');
+    game.load.image('goat-blue-leftup', 'chevresUpLeft-bleu.png');
+    game.load.image('goat-blue-rightup', 'chevresUpRight-bleu.png');
     game.load.spritesheet('rain', 'assets/rain.png', 17, 17);
     game.load.image('smoke', 'smoke-puff.png');
 
@@ -37,17 +51,18 @@ function preload() {
 // 1 case chemin
 // 2 3 4 5 Cases enceintes
 var map = [
-    [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0   ],
-    [   0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  0   ],
-    [   1,  1,  0,  1,  1,  1,  1,  0,  1,  0,  0,  0,  1,  0   ],
-    [   0,  1,  0,  1,  0,  0,  1,  0,  1,  1,  1,  0,  1,  0   ],
-    [   1,  1,  0,  1,  1,  0,  1,  0,  0,  0,  1,  0,  1,  0   ],
-    [   1,  0,  0,  0,  1,  0,  1,  0,  1,  1,  1,  0,  1,  0   ],
-    [   1,  1,  0,  0,  1,  0,  1,  0,  1,  0,  0,  0,  1,  0   ],
-    [   0,  1,  0,  1,  1,  0,  1,  1,  1,  0,  1,  1,  1,  0   ],
-    [   0,  1,  1,  1,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0   ],
-    [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1   ],
-    [   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0   ],
+    [   9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9   ],
+    [   9,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  0,  9   ],
+    [   9,  1,  1,  0,  1,  1,  1,  1,  0,  1,  0,  0,  0,  1,  0,  9   ],
+    [   9,  0,  1,  0,  1,  0,  0,  1,  0,  1,  1,  1,  0,  1,  0,  9   ],
+    [   9,  1,  1,  0,  1,  1,  0,  1,  0,  0,  0,  1,  0,  1,  0,  9   ],
+    [   9,  1,  0,  0,  0,  1,  0,  1,  0,  1,  1,  1,  0,  1,  0,  9   ],
+    [   9,  1,  1,  0,  0,  1,  0,  1,  0,  1,  0,  0,  0,  1,  0,  9   ],
+    [   9,  0,  1,  0,  1,  1,  0,  1,  1,  1,  0,  1,  1,  1,  0,  9   ],
+    [   9,  0,  1,  1,  1,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  9   ],
+    [   9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  9   ],
+    [   9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9   ],
+    [   9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9   ],
 ];
 
 var score;
@@ -87,10 +102,10 @@ function create() {
     var bkg = game.add.sprite(0, 0, "background");
 
     // Création de la grille de cases
-    for (var j = 0; j < 10; j++) {
-        for (var i = 0; i < 14; i++) {
+    for (var j = 0; j < 12; j++) {
+        for (var i = 0; i < 16; i++) {
             // Décallage a chaque itération pour adapter a l'isometric
-            button = game.add.button((-35 * j) + (39.7 * i) + 325, (14 + 17 * i) + (17.2 * j) + 65, 'tuile', building, this, 2, 1, 0);
+            button = game.add.button((-35 * j) + (39.7 * i) + 322, (14 + 17 * i) + (17.2 * j) + 31, 'tuile', building, this, 2, 1, 0);
             button.name = 'X' + i + '-Y' + j;
             button.caseX = i;
             button.caseY = j;
@@ -120,11 +135,16 @@ function create() {
     goats = game.add.group();
 
 
-    
+    // Création d'un bon nombre de goats
     setInterval(function() {
         goat = createGoat();
     }, 1000);
 
+    
+    // Etat initial du jeu
+    core.score = 0;
+    // pas d'enceinte selectionnee
+    core.etat = "repos";
 
 
 
@@ -326,7 +346,7 @@ function buildRegge() {
 
 function building(caseX, caseY) {
     if (map[selectedY][selectedX] == 0) {
-        var enceinte = game.add.image((-35*caseY) + (39.7 * caseX) + 325, (14 + 17*caseX) + (17.2 * caseY) + 45, core.etat);
+        var enceinte = game.add.image((-35*caseY) + (39.7 * caseX) + 322, (14 + 17*caseX) + (17.2 * caseY) + 11, core.etat);
         // Enceinte minifiée
         enceinte.scale.setTo(0.1,0.1);
         enceinte.name = caseX + "-" + caseY;
@@ -406,72 +426,137 @@ var actionGoat = function(goat) {
     if (goat.fatigue == 1) {
         return null;
     }
-    // Détection d'une enceinte Regge
-    if (map[goat.caseY + 1][goat.caseX - 1] == 5) { // Bas gauche
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY + 1][goat.caseX] == 5) { // Bas
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY + 1][goat.caseX + 1] == 5) { // Bas droite
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY][goat.caseX - 1] == 5) { // Gauche
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY][goat.caseX + 1] == 5) { // Droite
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY - 1][goat.caseX - 1] == 5) { // Haut gauche
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY - 1][goat.caseX] == 5) { // Haut
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }
-    if (map[goat.caseY - 1][goat.caseX + 1] == 5) { // Haut droite
-        goat.kill();
-        console.log("Goat absorbée. Vive le " + core.etat + " !!")
-    }            
 
+
+    // Débug du bord de map  
+    var caseUpLeft = 9;
+    var caseUp = 9;
+    var caseUpRight = 9;
+    if (map[goat.caseY -1][goat.caseX -1] !== undefined) {
+        caseUpLeft = map[goat.caseY -1][goat.caseX -1];
+    } 
+    if (map[goat.caseY -1][goat.caseX] !== undefined) {
+        caseUp = map[goat.caseY -1][goat.caseX];
+    }
+    if (map[goat.caseY -1][goat.caseX +1] !== undefined) {
+        caseUpRight = map[goat.caseY -1][goat.caseX +1];
+    }
+
+    // Détection d'une enceinte Regge
+    if (map[goat.caseY + 1][goat.caseX - 1] == goat.style) { // Bas gauche
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (map[goat.caseY + 1][goat.caseX] == goat.style) { // Bas
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (map[goat.caseY + 1][goat.caseX + 1] == goat.style) { // Bas droite
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (map[goat.caseY][goat.caseX - 1] == goat.style) { // Gauche
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (map[goat.caseY][goat.caseX + 1] == goat.style) { // Droite
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (caseUpLeft == goat.style) { // Haut gauche
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (caseUp == goat.style) { // Haut
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }
+    if (caseUpRight == goat.style) { // Haut droite
+        goat.kill();
+        core.score += goat.style;
+        console.log("Goat absorbée. Update du score : " + core.score + " !")
+    }          
 
 
     // Déplacement sur une case libre
     // Retour en arriere empeché
     // Droite
     if (map[goat.caseY][goat.caseX + 1] == 1 && (goat.caseX + 1 !== goat.lastX)) {
-        moveRight(goat);
-        goat.loadTexture('goat-rightdown');
-        goat.lastX = goat.caseX;
-        goat.lastY = goat.caseY;
-        goat.caseX +=1;
+        if (game.rnd.integerInRange(1, 4) == 1) {
+            moveRight(goat);
+            if (goat.style == "3") {
+                goat.loadTexture('goat-yellow-rightdown');    
+            } else if (goat.style == "5") {
+                goat.loadTexture('goat-blue-rightdown');    
+            } else {
+                goat.loadTexture('goat-rightdown');   
+            }
+            
+            goat.lastX = goat.caseX;
+            goat.lastY = goat.caseY;
+            goat.caseX +=1;
+        } else {
+            return null;
+        }
+        
     // Bas
     } else if (map[goat.caseY + 1][goat.caseX] == 1 && (goat.caseY + 1 !== goat.lastY)) {
-        moveDown(goat);
-        goat.loadTexture('goat-leftdown');
-        goat.lastX = goat.caseX;
-        goat.lastY = goat.caseY;
-        goat.caseY +=1;
+        if (game.rnd.integerInRange(1, 3) == 1) {
+            moveDown(goat);
+            if (goat.style == "3") {
+                goat.loadTexture('goat-yellow-leftdown');    
+            } else if (goat.style == "5") {
+                goat.loadTexture('goat-blue-leftdown');    
+            } else {
+                goat.loadTexture('goat-leftdown');   
+            }
+            goat.lastX = goat.caseX;
+            goat.lastY = goat.caseY;
+            goat.caseY +=1;
+        } else {
+            return null;
+        }
     // Gauche
     } else if (map[goat.caseY][goat.caseX - 1] == 1 && (goat.caseX - 1 !== goat.lastX)) {
-        moveLeft(goat);
-        goat.loadTexture('goat-leftup');
-        goat.lastX = goat.caseX;
-        goat.lastY = goat.caseY;
-        goat.caseX -=1;
+        if (game.rnd.integerInRange(1, 2) == 1) {
+            moveLeft(goat);
+            if (goat.style == "3") {
+                goat.loadTexture('goat-yellow-leftup');    
+            } else if (goat.style == "5") {
+                goat.loadTexture('goat-blue-leftup');    
+            } else {
+                goat.loadTexture('goat-leftup');   
+            }
+            goat.lastX = goat.caseX;
+            goat.lastY = goat.caseY;
+            goat.caseX -=1;
+        } else {
+            return null;
+        }
     // Haut
-    } else if (map[goat.caseY - 1][goat.caseX] == 1 && (goat.caseY - 1 !== goat.lastY)) {
-        moveUp(goat);
-        goat.loadTexture('goat-rightup');
-        goat.lastX = goat.caseX;
-        goat.lastY = goat.caseY;
-        goat.caseY -=1;
+    } else if (caseUp == 1 && (caseUp !== goat.lastY)) {
+        if (game.rnd.integerInRange(1, 2) == 1) {
+            moveUp(goat);
+            if (goat.style == "3") {
+                goat.loadTexture('goat-yellow-rightup');    
+            } else if (goat.style == "5") {
+                goat.loadTexture('goat-blue-rightup');    
+            } else {
+                goat.loadTexture('goat-rightup');   
+            }
+            goat.lastX = goat.caseX;
+            goat.lastY = goat.caseY;
+            goat.caseY -=1;
+        } else {
+            return null;
+        }
     // On bute la chevre à l'arrivée
     } else if (goat.caseX == 13 && goat.caseY == 8) {
         goat.kill();
@@ -487,13 +572,19 @@ function createGoat() {
 
     goat = goats.create(305, 90 , 'goat-rightdown');
     goat.scale.setTo(0.07, 0.07);
-    goat.caseX = 0;
+    goat.caseX = 1;
     goat.caseY = 2;
-    goat.lastX = 0;
-    goat.lastY = 0;
+    goat.lastX = 1;
+    goat.lastY = 1;
     goat.fatigue = 0;
-    goat.endurence = 2;
+    goat.endurence = game.rnd.integerInRange(1, 3);
+    goat.style = game.rnd.integerInRange(3, 5);
     tableGoat.push(goat);
     return goat;
 
 }
+
+
+
+
+/// ON LIEBERE LES CHEVRES
