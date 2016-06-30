@@ -25,6 +25,13 @@ function preload() {
     game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
     game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
 
+    //Chevre Musique
+    game.load.audio('scream1', 'assets/audio/goat_scream.mp3');
+    game.load.audio('scream2', 'assets/audio/goat_scream_1.mp3');
+    game.load.audio('rap', 'assets/audio/rap.mp3');
+    game.load.audio('reggae', 'assets/audio/reggae.mp3');
+    game.load.audio('metal', 'assets/audio/metal.mp3');
+
     // Chevre nue
     game.load.image('goat-rightdown', 'assets/chevresright.png');
     game.load.image('goat-leftdown', 'assets/chevres.png');
@@ -86,7 +93,7 @@ var core = {};
 var emitter;
 var smoke;
 var tornade;
-
+var music;
 
 // Création au lancement du jeu des éléments présents dans create
 function create() {
@@ -136,6 +143,7 @@ function create() {
     // Création d'un bon nombre de goats par interval entre 2 et 8 secondes
     setInterval(function() {
         goat = createGoat();
+        goatScream();
     },  2000 * game.rnd.integerInRange(1, 3) );
 
     // Mode pluie
@@ -262,7 +270,34 @@ function buildRegge() {
     }
 
 }
+function musical(){
+    if(core.etat == "rap"){
+        music = game.add.audio('rap');
+        console.log(music.name)
+        if(this.music.name != 'rap'){
+            music.stop();
+        }
+    }else if(core.etat == "regge"){
+        music = game.add.audio('reggae');
+        console.log(music.name)
+        if(this.music.name != 'reggae'){
+            music.stop();
+        }
+    }
+    if(core.etat == "metal"){
+        music = game.add.audio('metal');
+        console.log(music.name)
+        console.log(this.music)
+        if(this.music.name != 'metal'){
+            music.stop();
+        }
 
+    }
+    this.music.play()
+   console.log(this.music)
+}
+
+console.log(core.etat);
 // Construction d'une enceinte
 function building(caseX, caseY) {
 
@@ -283,11 +318,14 @@ function building(caseX, caseY) {
 
         // Dans le code enregistré dans map
         if (core.etat == "rap") {
-            map[selectedY][selectedX] = 3;    
+            map[selectedY][selectedX] = 3;
+            musical();
         } else if (core.etat == "metal") {
-            map[selectedY][selectedX] = 4;    
+            map[selectedY][selectedX] = 4;
+            musical();
         } else if (core.etat == "regge") {
-            map[selectedY][selectedX] = 5;    
+            map[selectedY][selectedX] = 5;
+            musical();
         }
         
     }
@@ -543,4 +581,13 @@ function update() {
         actionGoat(tableGoat[i]);
     }
 
+}
+function goatScream() {
+    var musicTab = ['scream1', 'scream2'];
+    var i = Math.floor(Math.random() * (2 - 0)) + 0;
+    music = game.add.audio(musicTab[i]);
+    var randPlay = Math.floor(Math.random() * (6 - 0)) + 0;
+    if (randPlay == 1) {
+        music.play();
+    }
 }
