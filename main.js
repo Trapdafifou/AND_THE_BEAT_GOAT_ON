@@ -15,7 +15,7 @@ function preload() {
     game.load.image('tuile', 'assets/case-xs-light.png');
     game.load.image("background", "assets/background.png");
     game.load.image('cadre', 'assets/cadre.png');
-
+    game.load.image('pause', 'assets/pause.png');
 
     game.load.image('enceinte', 'assets/enceinte/enceinte-off.png');
     game.load.image('rap', 'assets/enceinte/enceinte-rap.png');
@@ -105,6 +105,7 @@ var reggae;
 
 // Création au lancement du jeu des éléments présents dans create
 function create() {
+    pause_label = game.add.image(game.width -100, 20, 'pause');
 
     // Etat initial du jeu
     core.score = 0;
@@ -113,6 +114,7 @@ function create() {
 
     // Ajout de la map
     var bkg = game.add.sprite(0, 0, "background");
+    game.stage.backgroundColor= '#7ec0ee';
 
     //Ajout des musiques
 
