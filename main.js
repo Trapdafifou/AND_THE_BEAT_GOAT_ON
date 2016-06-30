@@ -607,7 +607,7 @@ function goatScream() {
     var musicTab = ['scream1', 'scream2'];
     var i = Math.floor(Math.random() * (2 - 0)) + 0;
     music = game.add.audio(musicTab[i]);
-    var randPlay = Math.floor(Math.random() * (3 - 0)) + 0;
+    var randPlay = Math.floor(Math.random() * (1 - 1)) + 1;
     if (randPlay == 1) {
         music.play();
     }
