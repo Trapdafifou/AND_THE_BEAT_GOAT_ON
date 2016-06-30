@@ -93,8 +93,10 @@ function create() {
 
     // Etat initial du jeu
     core.score = 0;
-    // pas d'enceinte selectionnee
+    // Pas d'enceinte selectionnee
     core.etat = "repos";
+    // Money de départ
+    core.money = 10000;
 
     // Ajout de la map
     var bkg = game.add.sprite(0, 0, "background");
@@ -136,6 +138,7 @@ function create() {
     // Création d'un bon nombre de goats par interval entre 2 et 8 secondes
     setInterval(function() {
         goat = createGoat();
+        core.money += 1000; // Elle paie son billet d'entré
     },  2000 * game.rnd.integerInRange(1, 3) );
 
     // Mode pluie
@@ -179,15 +182,15 @@ function onDown(sprite) {
     sprite.tint = 0xff0000;
 
     // Construction d'une enceinte rap si permise
-    if (core.etat == "rap" && map[selectedY][selectedX] == 0) {
+    if (core.etat == "rap" && (map[selectedY][selectedX] == 0 || map[selectedY][selectedX] == 8)) {
         building(selectedX, selectedY, "rap");
     }
     // Construction d'une enceinte metal si permise
-    if (core.etat == "metal" && map[selectedY][selectedX] == 0) {
+    if (core.etat == "metal" && (map[selectedY][selectedX] == 0 || map[selectedY][selectedX] == 8)) {
         building(selectedX, selectedY, "metal");
     }
     // Construction d'une enceinte regge si permise
-    if (core.etat == "regge" && map[selectedY][selectedX] == 0) {
+    if (core.etat == "regge" && (map[selectedY][selectedX] == 0 || map[selectedY][selectedX] == 8)) {
         building(selectedX, selectedY, "regge");
     }
 
@@ -197,7 +200,7 @@ function onDown(sprite) {
 function onOver(sprite) {
 
     // Vérification si constructible : valeur 0 dans la map et enceinte choisie
-    if (core.etat !== "repos" && map[sprite.caseY][sprite.caseX] == 0) {
+    if (core.etat !== "repos" && (map[sprite.caseY][sprite.caseX] == 0 || map[sprite.caseY][sprite.caseX] == 8)) {
         // Coloration verte pour signaler la construction
         sprite.alpha = 1;
         sprite.tint = 0x00ff00;
@@ -267,29 +270,61 @@ function buildRegge() {
 function building(caseX, caseY) {
 
     if (map[selectedY][selectedX] == 0) {
+        // Vérification du solde
+        if(core.money > 1000) {
+            // Visuellement
+            var enceinte = game.add.image((-35 * caseY) + (39.7 * caseX) + 322, (14 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
+            enceinte.scale.setTo(0.1,0.1);
+            enceinte.name = caseX + "-" + caseY;
+            enceinte.selectedX = selectedX;
+            enceinte.selectedY = selectedY;
+            enceintes.push(enceinte);
 
-        // Visuellement
-        var enceinte = game.add.image((-35 * caseY) + (39.7 * caseX) + 322, (14 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
-        enceinte.scale.setTo(0.1,0.1);
-        enceinte.name = caseX + "-" + caseY;
-        enceinte.selectedX = selectedX;
-        enceinte.selectedY = selectedY;
-        enceintes.push(enceinte);
+            // L'enceinte se dégrade avec le temps et est inactive après 20s
+            setTimeout(function() {
+                destroy(enceinte);
+            }, 20000);
 
-        // L'enceinte se dégrade avec le temps et est inactive après 5s
-        setTimeout(function() {
-            destroy(enceinte);
-        }, 5000);
-
-        // Dans le code enregistré dans map
-        if (core.etat == "rap") {
-            map[selectedY][selectedX] = 3;    
-        } else if (core.etat == "metal") {
-            map[selectedY][selectedX] = 4;    
-        } else if (core.etat == "regge") {
-            map[selectedY][selectedX] = 5;    
+            // Dans le code enregistré dans map
+            if (core.etat == "rap") {
+                map[selectedY][selectedX] = 3;    
+            } else if (core.etat == "metal") {
+                map[selectedY][selectedX] = 4;    
+            } else if (core.etat == "regge") {
+                map[selectedY][selectedX] = 5;    
+            }
+        // Payer la facture de l'enceinte            
+        core.money -= 1000;       
         }
-        
+    }
+
+    if (map[selectedY][selectedX] == 8) {
+        // Vérification du solde
+        if(core.money > 200) {
+            // Visuellement
+            var enceinte = game.add.image((-35 * caseY) + (39.7 * caseX) + 322, (14 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
+            enceinte.scale.setTo(0.1,0.1);
+            enceinte.name = caseX + "-" + caseY;
+            enceinte.selectedX = selectedX;
+            enceinte.selectedY = selectedY;
+            enceintes.push(enceinte);
+
+            // L'enceinte se dégrade avec le temps et est inactive après 20s
+            setTimeout(function() {
+                destroy(enceinte);
+            }, 20000);
+
+            // Dans le code enregistré dans map
+            if (core.etat == "rap") {
+                map[selectedY][selectedX] = 3;    
+            } else if (core.etat == "metal") {
+                map[selectedY][selectedX] = 4;    
+            } else if (core.etat == "regge") {
+                map[selectedY][selectedX] = 5;    
+            }
+        // Payer la facture de l'enceinte            
+        core.money -= 200;       
+        }
     }
 }
 
@@ -301,7 +336,7 @@ function destroy(enceinte) {
     enceinte = game.add.image((-35 * enceinte.selectedY) + (39.7 * enceinte.selectedX) + 322,
         (14 + 17 * enceinte.selectedX) + (17.2 * enceinte.selectedY) + 11, "enceinte");
     enceinte.scale.setTo(0.1,0.1);
-    map[selectedY][selectedX] = 9;
+    map[selectedY][selectedX] = 8;
 
 }
 
