@@ -73,17 +73,10 @@ var map = [
 var saveMap;
 var score;
 var button;
-var enceintes;
+var enceintes = [];
 var tween = null;
-var artist = ["Bob Marley", "David Guetouille"];
 var selectedX;
 var selectedY;
-var selectedSong = "";
-var nowPlaying;
-var bobSong;
-var guettaSong;
-var videSong;
-var music;
 var goat;
 var capaciteSite = 200;
 var tableGoat = [];
@@ -274,10 +267,20 @@ function buildRegge() {
 function building(caseX, caseY) {
 
     if (map[selectedY][selectedX] == 0) {
+
         // Visuellement
         var enceinte = game.add.image((-35 * caseY) + (39.7 * caseX) + 322, (14 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
         enceinte.scale.setTo(0.1,0.1);
         enceinte.name = caseX + "-" + caseY;
+        enceinte.selectedX = selectedX;
+        enceinte.selectedY = selectedY;
+        enceintes.push(enceinte);
+
+        // L'enceinte se dégrade avec le temps et est inactive après 5s
+        setTimeout(function() {
+            destroy(enceinte);
+        }, 5000);
+
         // Dans le code enregistré dans map
         if (core.etat == "rap") {
             map[selectedY][selectedX] = 3;    
@@ -289,6 +292,19 @@ function building(caseX, caseY) {
         
     }
 }
+
+function destroy(enceinte) {
+
+    var selectedX = enceinte.selectedX;
+    var selectedY = enceinte.selectedY;
+    enceinte.kill();
+    enceinte = game.add.image((-35 * enceinte.selectedY) + (39.7 * enceinte.selectedX) + 322,
+        (14 + 17 * enceinte.selectedX) + (17.2 * enceinte.selectedY) + 11, "enceinte");
+    enceinte.scale.setTo(0.1,0.1);
+    map[selectedY][selectedX] = 9;
+
+}
+
 
 // Déplacement du sprite au mouvement de la chèvre
 // Les valeurs de déplacement sont adaptées au maillage de la map
@@ -499,10 +515,12 @@ function scaleSort(a, b) {
 }
 
 // Permet de nettoyer une enceinte hors d'usage
-function recycle() {
-
-    // TO DO !!!!!!!!
-
+function recycle(caseX, caseY) {
+    
+    function cleanEnceinte(enceinte) {
+        return enceinte.name === (caseX + "-" + caseY);
+    }
+    enceintes.find(cleanEnceinte);
 
 }
 
