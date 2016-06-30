@@ -13,12 +13,16 @@ function preload() {
 
     // Chargement des fichiers du jeu
     game.load.image('tuile', 'assets/case-xs-light.png');
-    game.load.image("background", "assets/carte.png");
+    game.load.image("background", "assets/background.png");
     game.load.image('cadre', 'assets/cadre.png');
-    game.load.image('enceinte', 'assets/enceinte.png');
-    game.load.image('rap', 'assets/enceinte-jaune.png');
-    game.load.image('metal', 'assets/enceinte-rouge.png');
-    game.load.image('regge', 'assets/enceinte-bleu.png');
+
+
+    game.load.image('enceinte', 'assets/enceinte/enceinte-off.png');
+    game.load.image('rap', 'assets/enceinte/enceinte-rap.png');
+    game.load.image('metal', 'assets/enceinte/enceinte-rock.png');
+    game.load.image('regge', 'assets/enceinte/enceinte-reggae.png');
+
+
     game.load.image('pluie', 'assets/pluie.png');
     game.load.image('tornade', 'assets/tornade.png');
     game.load.image('exit', 'assets/exit.png');
@@ -32,23 +36,23 @@ function preload() {
     game.load.audio('reggae', 'assets/audio/reggae.mp3');
     game.load.audio('metal', 'assets/audio/metal.mp3');
 
-    // Chevre nue
-    game.load.image('goat-rightdown', 'assets/chevresright.png');
-    game.load.image('goat-leftdown', 'assets/chevres.png');
-    game.load.image('goat-leftup', 'assets/chevresUpLeft.png');
-    game.load.image('goat-rightup', 'assets/chevresUpRight.png');
+    // Chevre rock
+    game.load.image('goat-rightdown', 'assets/chevres/rock/ChevreRockDownRight.png');
+    game.load.image('goat-leftdown', 'assets/chevres/rock/ChevreRockDownLeft.png');
+    game.load.image('goat-leftup', 'assets/chevres/rock/ChevreRockUpLeft.png');
+    game.load.image('goat-rightup', 'assets/chevres/rock/ChevreRockUpRight.png');
 
-    // Chevre bleue
-    game.load.image('goat-yellow-rightdown', 'assets/chevresright-jaune.png');
-    game.load.image('goat-yellow-leftdown', 'assets/chevres-jaune.png');
-    game.load.image('goat-yellow-leftup', 'assets/chevresUpLeft-jaune.png');
-    game.load.image('goat-yellow-rightup', 'assets/chevresUpRight-jaune.png');
+    // Chevre reggae
+    game.load.image('goat-yellow-rightdown', 'assets/chevres/reggae/ChevreReggaeDownRight.png');
+    game.load.image('goat-yellow-leftdown', 'assets/chevres/reggae/ChevreReggaeDownleft.png');
+    game.load.image('goat-yellow-leftup', 'assets/chevres/reggae/ChevreReggaeUpLeft.png');
+    game.load.image('goat-yellow-rightup', 'assets/chevres/reggae/ChevreReggaeUpRight.png');
 
-    // Chevre jaune
-    game.load.image('goat-blue-rightdown', 'assets/chevresright-bleu.png');
-    game.load.image('goat-blue-leftdown', 'assets/chevres-bleu.png');
-    game.load.image('goat-blue-leftup', 'assets/chevresUpLeft-bleu.png');
-    game.load.image('goat-blue-rightup', 'assets/chevresUpRight-bleu.png');
+    // Chevre rap
+    game.load.image('goat-blue-rightdown', 'assets/chevres/rap/ChevreRapDownRight.png');
+    game.load.image('goat-blue-leftdown', 'assets/chevres/rap/ChevreRapDownleft.png');
+    game.load.image('goat-blue-leftup', 'assets/chevres/rap/ChevreRapUpLeft.png');
+    game.load.image('goat-blue-rightup', 'assets/chevres/rap/ChevreRapUpRight.png');
     game.load.spritesheet('rain', 'assets/rain.png', 17, 17);
     game.load.image('smoke', 'assets/smoke-puff.png');
 
@@ -512,7 +516,7 @@ var actionGoat = function (goat) {
 function createGoat() {
 
     goat = goats.create(305, 90, 'goat-rightdown');
-    goat.scale.setTo(0.07, 0.07);
+    goat.scale.setTo(0.1, 0.1);
     goat.caseX = 1;
     goat.caseY = 2;
     goat.lastX = 1;
