@@ -278,6 +278,7 @@ function buildMetal() {
 
     if (core.etat == "repos") {
         core.etat = "metal";
+        musical()
     } else {
         core.etat = "metal";
     }
@@ -343,14 +344,20 @@ function building(caseX, caseY) {
         // Dans le code enregistré dans map
         if (core.etat == "rap") {
             map[selectedY][selectedX] = 3;
+            if (!rap.isPlaying){
             musical();
+            }
         }
         else if (core.etat == "metal") {
             map[selectedY][selectedX] = 4;
-            musical();
+            if (!metal.isPlaying){
+                musical();
+            }
         } else if (core.etat == "regge") {
             map[selectedY][selectedX] = 5;
-            musical();
+            if (!reggae.isPlaying){
+                musical();
+            }
         }
 
     }
