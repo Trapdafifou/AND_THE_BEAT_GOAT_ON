@@ -32,6 +32,7 @@ function preload() {
     //Chevre Musique
     game.load.audio('scream1', 'assets/audio/goat_scream.mp3');
     game.load.audio('scream2', 'assets/audio/goat_scream_1.mp3');
+    game.load.audio('banjo', 'assets/audio/Banjo.mp3');
     game.load.audio('rap', 'assets/audio/rap.mp3');
     game.load.audio('reggae', 'assets/audio/reggae.mp3');
     game.load.audio('metal', 'assets/audio/metal.mp3');
@@ -102,20 +103,28 @@ var musicOn;
 var rap;
 var metal;
 var reggae;
+var banjo;
 
 // Création au lancement du jeu des éléments présents dans create
 function create() {
-    pause_label = game.add.image(game.width -100, 20, 'pause');
-
+    banjo = game.add.audio('banjo');
+    banjo.play();
     // Etat initial du jeu
     core.score = 0;
     // pas d'enceinte selectionnee
     core.etat = "repos";
 
+    //
+    var pause_label = game.add.image(game.width - 100, 20, 'pause');
+    pause_label.events.onInputDown.add(function () {
+        game.paused = true;
+        var menu = game.add.text(game.centerX, game.centerY, 'PAUSED', {font: '90px Arial', fill: '#FFFFFF'});
+        menu.anchor.setTo(0.5, 0.5);
+    });
     // Ajout de la map
     var bkg = game.add.sprite(0, 0, "background");
-    game.stage.backgroundColor= '#7ec0ee';
-
+    game.stage.backgroundColor = '#7ec0ee';
+    game.world.swap(bkg, pause_label);
     //Ajout des musiques
 
     rap = game.add.audio('rap');
@@ -292,6 +301,7 @@ function musical() {
 
         metal.pause();
         reggae.pause();
+        banjo.pause();
     }
 
     else if (core.etat == "regge") {
@@ -299,12 +309,14 @@ function musical() {
 
         metal.pause();
         rap.pause();
+        banjo.pause();
     }
     else if (core.etat == "metal") {
         metal.play();
 
         reggae.pause();
         rap.pause();
+        banjo.pause();
     }
 }
 
