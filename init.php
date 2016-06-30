@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/vendor/autoload.php";
 try {
-    $pdo = new \PDO("mysql:host=localhost;dbname=goat", "root", "root");
+    $pdo = new \PDO("mysql:host=localhost;dbname=goat", "root", "rooot");
     $pdo->query("SET NAMES 'UTF8';");
 } catch (PDOException $e) {
     die($e->getMessage());
