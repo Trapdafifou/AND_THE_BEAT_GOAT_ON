@@ -37,7 +37,7 @@ function preload() {
     game.load.image('goat-leftdown', 'assets/chevres.png');
     game.load.image('goat-leftup', 'assets/chevresUpLeft.png');
     game.load.image('goat-rightup', 'assets/chevresUpRight.png');
-    
+
     // Chevre bleue
     game.load.image('goat-yellow-rightdown', 'assets/chevresright-jaune.png');
     game.load.image('goat-yellow-leftdown', 'assets/chevres-jaune.png');
@@ -62,18 +62,18 @@ function preload() {
 // 5 case regge
 // 9 case morte
 var map = [
-    [   9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9   ],
-    [   9,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  0,  9   ],
-    [   9,  1,  1,  0,  1,  1,  1,  1,  0,  1,  0,  0,  0,  1,  0,  9   ],
-    [   9,  0,  1,  0,  1,  0,  0,  1,  0,  1,  1,  1,  0,  1,  0,  9   ],
-    [   9,  1,  1,  0,  1,  1,  0,  1,  0,  0,  0,  1,  0,  1,  0,  9   ],
-    [   9,  1,  0,  0,  0,  1,  0,  1,  0,  1,  1,  1,  0,  1,  0,  9   ],
-    [   9,  1,  1,  0,  0,  1,  0,  1,  0,  1,  0,  0,  0,  1,  0,  9   ],
-    [   9,  0,  1,  0,  1,  1,  0,  1,  1,  1,  0,  1,  1,  1,  0,  9   ],
-    [   9,  0,  1,  1,  1,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  9   ],
-    [   9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  9   ],
-    [   9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9   ],
-    [   9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9,  9   ],
+    [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
+    [9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 9],
+    [9, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 9],
+    [9, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 9],
+    [9, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 9],
+    [9, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 9],
+    [9, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 9],
+    [9, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 9],
+    [9, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 9],
+    [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 9],
+    [9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9],
+    [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
 ];
 
 // Variables du jeu
@@ -94,6 +94,10 @@ var emitter;
 var smoke;
 var tornade;
 var music;
+var musicOn;
+var rap;
+var metal;
+var reggae;
 
 // Création au lancement du jeu des éléments présents dans create
 function create() {
@@ -106,17 +110,23 @@ function create() {
     // Ajout de la map
     var bkg = game.add.sprite(0, 0, "background");
 
+    //Ajout des musiques
+
+    rap = game.add.audio('rap');
+    metal = game.add.audio('metal');
+    reggae = game.add.audio('reggae');
+
     // Bouton du passage en mode constructeur regge
     var boutonRegge = game.add.button(50, 450, 'regge', buildRegge, this, 2, 1, 0);
-    boutonRegge.scale.setTo(0.2,0.2);
+    boutonRegge.scale.setTo(0.2, 0.2);
 
     // Bouton du passage en mode constructeur metal
     var boutonMetal = game.add.button(50, 350, 'metal', buildMetal, this, 2, 1, 0);
-    boutonMetal.scale.setTo(0.2,0.2);
+    boutonMetal.scale.setTo(0.2, 0.2);
 
     // Bouton du passage en mode constructeur rap
     var boutonRap = game.add.button(150, 450, 'rap', buildRap, this, 2, 1, 0);
-    boutonRap.scale.setTo(0.2,0.2);
+    boutonRap.scale.setTo(0.2, 0.2);
 
     // Création de la grille de cases
     for (var j = 0; j < 12; j++) {
@@ -125,7 +135,7 @@ function create() {
             button = game.add.button(
                 (-35 * j) + (39.7 * i) + 322,            // Position en X
                 (14 + 17 * i) + (17.2 * j) + 31,         // Position en Y
-                'tuile', building, this, 2, 1, 0 );      // Visuel de la case
+                'tuile', building, this, 2, 1, 0);      // Visuel de la case
             button.name = 'X' + i + '-Y' + j;
             button.caseX = i;
             button.caseY = j;
@@ -141,10 +151,10 @@ function create() {
     goats = game.add.group();
 
     // Création d'un bon nombre de goats par interval entre 2 et 8 secondes
-    setInterval(function() {
+    setInterval(function () {
         goat = createGoat();
         goatScream();
-    },  2000 * game.rnd.integerInRange(1, 3) );
+    }, 2000 * game.rnd.integerInRange(1, 3));
 
     // Mode pluie
     emitter = game.add.emitter(game.world.centerX, 0, 400);
@@ -173,8 +183,8 @@ function create() {
     smoke.start(false, 4000, 20);
     smoke.emitX = 64;
     smoke.emitY = 500;
-    game.add.tween(smoke).to( { emitX: 800-64 }, 1000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
-    game.add.tween(smoke).to( { emitY: 200 }, 4000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
+    game.add.tween(smoke).to({emitX: 800 - 64}, 1000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
+    game.add.tween(smoke).to({emitY: 200}, 4000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.MAX_VALUE, true);
     smoke.alpha = 0;
 
 }
@@ -237,7 +247,6 @@ function dragDrop(obj) {
 }
 
 
-
 // Changement du mode de construction à Rap
 function buildRap() {
 
@@ -270,32 +279,29 @@ function buildRegge() {
     }
 
 }
-function musical(){
-    if(core.etat == "rap"){
-        music = game.add.audio('rap');
-        console.log(music.name)
-        if(this.music.name != 'rap'){
-            music.stop();
-        }
-    }else if(core.etat == "regge"){
-        music = game.add.audio('reggae');
-        console.log(music.name)
-        if(this.music.name != 'reggae'){
-            music.stop();
-        }
-    }
-    if(core.etat == "metal"){
-        music = game.add.audio('metal');
-        console.log(music.name)
-        console.log(this.music)
-        if(this.music.name != 'metal'){
-            music.stop();
-        }
+function musical() {
 
+    if (core.etat == "rap") {
+        rap.play();
+
+        metal.pause();
+        reggae.pause();
     }
-    this.music.play()
-   console.log(this.music)
+
+    else if (core.etat == "regge") {
+        reggae.play();
+
+        metal.pause();
+        rap.pause();
+    }
+    else if (core.etat == "metal") {
+        metal.play();
+
+        reggae.pause();
+        rap.pause();
+    }
 }
+
 
 console.log(core.etat);
 // Construction d'une enceinte
@@ -305,14 +311,14 @@ function building(caseX, caseY) {
 
         // Visuellement
         var enceinte = game.add.image((-35 * caseY) + (39.7 * caseX) + 322, (14 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
-        enceinte.scale.setTo(0.1,0.1);
+        enceinte.scale.setTo(0.1, 0.1);
         enceinte.name = caseX + "-" + caseY;
         enceinte.selectedX = selectedX;
         enceinte.selectedY = selectedY;
         enceintes.push(enceinte);
 
         // L'enceinte se dégrade avec le temps et est inactive après 5s
-        setTimeout(function() {
+        setTimeout(function () {
             destroy(enceinte);
         }, 5000);
 
@@ -320,14 +326,15 @@ function building(caseX, caseY) {
         if (core.etat == "rap") {
             map[selectedY][selectedX] = 3;
             musical();
-        } else if (core.etat == "metal") {
+        }
+        else if (core.etat == "metal") {
             map[selectedY][selectedX] = 4;
             musical();
         } else if (core.etat == "regge") {
             map[selectedY][selectedX] = 5;
             musical();
         }
-        
+
     }
 }
 
@@ -338,36 +345,35 @@ function destroy(enceinte) {
     enceinte.kill();
     enceinte = game.add.image((-35 * enceinte.selectedY) + (39.7 * enceinte.selectedX) + 322,
         (14 + 17 * enceinte.selectedX) + (17.2 * enceinte.selectedY) + 11, "enceinte");
-    enceinte.scale.setTo(0.1,0.1);
+    enceinte.scale.setTo(0.1, 0.1);
     map[selectedY][selectedX] = 9;
-
 }
 
 
 // Déplacement du sprite au mouvement de la chèvre
 // Les valeurs de déplacement sont adaptées au maillage de la map
-var moveLeft= function(goat) {
+var moveLeft = function (goat) {
 
     goat.x -= 38;
     goat.y -= 13;
 
 };
 
-var moveRight = function(goat) {
+var moveRight = function (goat) {
 
     goat.x += 37;
     goat.y += 13;
 
 };
 
-var moveUp = function(goat) {
+var moveUp = function (goat) {
 
     goat.x += 35;
     goat.y -= 17;
 
 };
 
-var moveDown = function(goat) {
+var moveDown = function (goat) {
 
     goat.x -= 33;
     goat.y += 20;
@@ -375,7 +381,7 @@ var moveDown = function(goat) {
 };
 
 // Déplacement et interraction de la chèvre
-var actionGoat = function(goat) {
+var actionGoat = function (goat) {
 
     // Si elle est fatiguée, elle ne fait rien
     if (goat.fatigue == 1) {
@@ -409,7 +415,7 @@ var actionGoat = function(goat) {
     }
     if (map[goat.caseY - 1][goat.caseX + 1] == goat.style) { // Haut droite
         goat.moral += 5;
-    }          
+    }
 
     if (goat.moral > 200) {
         goat.kill();
@@ -423,80 +429,80 @@ var actionGoat = function(goat) {
         if (game.rnd.integerInRange(1, 2) == 1) {
             moveRight(goat);
             if (goat.style == "3") {
-                goat.loadTexture('goat-yellow-rightdown');    
+                goat.loadTexture('goat-yellow-rightdown');
             } else if (goat.style == "5") {
-                goat.loadTexture('goat-blue-rightdown');    
+                goat.loadTexture('goat-blue-rightdown');
             } else {
-                goat.loadTexture('goat-rightdown');   
+                goat.loadTexture('goat-rightdown');
             }
-            
+
             goat.lastX = goat.caseX;
             goat.lastY = goat.caseY;
-            goat.caseX +=1;
+            goat.caseX += 1;
         }
-        
-    // Vers le bas
+
+        // Vers le bas
     } else if (map[goat.caseY + 1][goat.caseX] == 1 && (goat.caseY + 1 !== goat.lastY)) {
         if (game.rnd.integerInRange(1, 2) == 1) {
             moveDown(goat);
             if (goat.style == "3") {
-                goat.loadTexture('goat-yellow-leftdown');    
+                goat.loadTexture('goat-yellow-leftdown');
             } else if (goat.style == "5") {
-                goat.loadTexture('goat-blue-leftdown');    
+                goat.loadTexture('goat-blue-leftdown');
             } else {
-                goat.loadTexture('goat-leftdown');   
+                goat.loadTexture('goat-leftdown');
             }
             goat.lastX = goat.caseX;
             goat.lastY = goat.caseY;
-            goat.caseY +=1;
+            goat.caseY += 1;
         } else {
             return null;
         }
 
-    // Vers la gauche
+        // Vers la gauche
     } else if (map[goat.caseY][goat.caseX - 1] == 1 && (goat.caseX - 1 !== goat.lastX)) {
         if (game.rnd.integerInRange(1, 2) == 1) {
             moveLeft(goat);
             if (goat.style == "3") {
-                goat.loadTexture('goat-yellow-leftup');    
+                goat.loadTexture('goat-yellow-leftup');
             } else if (goat.style == "5") {
-                goat.loadTexture('goat-blue-leftup');    
+                goat.loadTexture('goat-blue-leftup');
             } else {
-                goat.loadTexture('goat-leftup');   
+                goat.loadTexture('goat-leftup');
             }
             goat.lastX = goat.caseX;
             goat.lastY = goat.caseY;
-            goat.caseX -=1;
+            goat.caseX -= 1;
         } else {
             return null;
         }
 
-    // Vers le haut
+        // Vers le haut
     } else if (map[goat.caseY - 1][goat.caseX] == 1 && (map[goat.caseY - 1][goat.caseX] !== goat.lastY)) {
         if (game.rnd.integerInRange(1, 2) == 1) {
             moveUp(goat);
             if (goat.style == "3") {
-                goat.loadTexture('goat-yellow-rightup');    
+                goat.loadTexture('goat-yellow-rightup');
             } else if (goat.style == "5") {
-                goat.loadTexture('goat-blue-rightup');    
+                goat.loadTexture('goat-blue-rightup');
             } else {
-                goat.loadTexture('goat-rightup');   
+                goat.loadTexture('goat-rightup');
             }
             goat.lastX = goat.caseX;
             goat.lastY = goat.caseY;
-            goat.caseY -=1;
+            goat.caseY -= 1;
         } else {
             return null;
         }
 
-    // On bute la chevre à l'arrivée
+        // On bute la chevre à l'arrivée
     } else if (goat.caseX == 14 && goat.caseY == 9) {
         goat.kill();
     }
     // La chèvre est fatiguée
     goat.fatigue = 1;
     // Elle redevient active après un temps dépendant de son endurance
-    setTimeout(function(){
+    setTimeout(function () {
         goat.fatigue = 0;
     }, (1 / goat.endurence) * 1000);
 
@@ -505,7 +511,7 @@ var actionGoat = function(goat) {
 // Création des chèvres
 function createGoat() {
 
-    goat = goats.create(305, 90 , 'goat-rightdown');
+    goat = goats.create(305, 90, 'goat-rightdown');
     goat.scale.setTo(0.07, 0.07);
     goat.caseX = 1;
     goat.caseY = 2;
@@ -538,30 +544,27 @@ function anarchyGoat() {
 
 // Rangement par taille
 function scaleSort(a, b) {
-    if (a.scale.x < b.scale.x)
-    {
+    if (a.scale.x < b.scale.x) {
         return -1;
     }
-    else if (a.scale.x > b.scale.x)
-    {
+    else if (a.scale.x > b.scale.x) {
         return 1;
     }
-    else
-    {
+    else {
         return 0;
     }
 }
 
 // Permet de nettoyer une enceinte hors d'usage
 function recycle(caseX, caseY) {
-    
+
     function cleanEnceinte(enceinte) {
         return enceinte.name === (caseX + "-" + caseY);
     }
+
     enceintes.find(cleanEnceinte);
 
 }
-
 
 
 // Affichages d'états pour le débugging
@@ -586,7 +589,7 @@ function goatScream() {
     var musicTab = ['scream1', 'scream2'];
     var i = Math.floor(Math.random() * (2 - 0)) + 0;
     music = game.add.audio(musicTab[i]);
-    var randPlay = Math.floor(Math.random() * (6 - 0)) + 0;
+    var randPlay = Math.floor(Math.random() * (3 - 0)) + 0;
     if (randPlay == 1) {
         music.play();
     }
