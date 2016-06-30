@@ -8,53 +8,52 @@ var game = new Phaser.Game(900, 600, Phaser.CANVAS, 'phaser-example', {
     update: update,
     render: render
 });
-
 function preload() {
 
     // Chargement des fichiers du jeu
-    game.load.image('tuile', 'assets/case-xs-light.png');
-    game.load.image("background", "assets/background.png");
-    game.load.image('cadre', 'assets/cadre.png');
-    game.load.image('pause', 'assets/pause.png');
+    game.load.image('tuile', './assets/img/case-xs-light.png');
+    game.load.image("background", "./assets/img/background.png");
+    game.load.image('cadre', './assets/img/cadre.png');
+    game.load.image('pause', './assets/img/pause.png');
 
-    game.load.image('enceinte', 'assets/enceinte/enceinte-off.png');
-    game.load.image('rap', 'assets/enceinte/enceinte-rap.png');
-    game.load.image('metal', 'assets/enceinte/enceinte-rock.png');
-    game.load.image('regge', 'assets/enceinte/enceinte-reggae.png');
+    game.load.image('enceinte', './assets/img/enceinte/enceinte-off.png');
+    game.load.image('rap', './assets/img/enceinte/enceinte-rap.png');
+    game.load.image('metal', './assets/img/enceinte/enceinte-rock.png');
+    game.load.image('regge', './assets/img/enceinte/enceinte-reggae.png');
 
 
-    game.load.image('pluie', 'assets/pluie.png');
-    game.load.image('tornade', 'assets/tornade.png');
-    game.load.image('exit', 'assets/exit.png');
-    game.load.audio('bob', ['assets/audio/oedipus_wizball_highscore.mp3', 'assets/audio/oedipus_wizball_highscore.ogg']);
-    game.load.audio('guetta', ['assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', 'assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
+    game.load.image('pluie', './assets/img/pluie.png');
+    game.load.image('tornade', './assets/img/tornade.png');
+    game.load.image('exit', './assets/img/exit.png');
+    game.load.audio('bob', ['./assets/audio/oedipus_wizball_highscore.mp3', './assets/audio/oedipus_wizball_highscore.ogg']);
+    game.load.audio('guetta', ['./assets/audio/bodenstaendig_2000_in_rock_4bit.mp3', './assets/audio/bodenstaendig_2000_in_rock_4bit.ogg']);
 
     //Chevre Musique
-    game.load.audio('scream1', 'assets/audio/goat_scream.mp3');
-    game.load.audio('scream2', 'assets/audio/goat_scream_1.mp3');
-    game.load.audio('rap', 'assets/audio/rap.mp3');
-    game.load.audio('reggae', 'assets/audio/reggae.mp3');
-    game.load.audio('metal', 'assets/audio/metal.mp3');
+    game.load.audio('scream1', './assets/audio/goat_scream.mp3');
+    game.load.audio('scream2', './assets/audio/goat_scream_1.mp3');
+    game.load.audio('rap', './assets/audio/rap.mp3');
+    game.load.audio('reggae', './assets/audio/reggae.mp3');
+    game.load.audio('metal', './assets/audio/metal.mp3');
 
     // Chevre rock
-    game.load.image('goat-rightdown', 'assets/chevres/rock/ChevreRockDownRight.png');
-    game.load.image('goat-leftdown', 'assets/chevres/rock/ChevreRockDownLeft.png');
-    game.load.image('goat-leftup', 'assets/chevres/rock/ChevreRockUpLeft.png');
-    game.load.image('goat-rightup', 'assets/chevres/rock/ChevreRockUpRight.png');
+    game.load.image('goat-rightdown', './assets/img/chevres/rock/ChevreRockDownRight.png');
+    game.load.image('goat-leftdown', './assets/img/chevres/rock/ChevreRockDownLeft.png');
+    game.load.image('goat-leftup', './assets/img/chevres/rock/ChevreRockUpLeft.png');
+    game.load.image('goat-rightup', './assets/img/chevres/rock/ChevreRockUpRight.png');
 
     // Chevre reggae
-    game.load.image('goat-yellow-rightdown', 'assets/chevres/reggae/ChevreReggaeDownRight.png');
-    game.load.image('goat-yellow-leftdown', 'assets/chevres/reggae/ChevreReggaeDownleft.png');
-    game.load.image('goat-yellow-leftup', 'assets/chevres/reggae/ChevreReggaeUpLeft.png');
-    game.load.image('goat-yellow-rightup', 'assets/chevres/reggae/ChevreReggaeUpRight.png');
+    game.load.image('goat-yellow-rightdown', './assets/img/chevres/reggae/ChevreReggaeDownRight.png');
+    game.load.image('goat-yellow-leftdown', './assets/img/chevres/reggae/ChevreReggaeDownleft.png');
+    game.load.image('goat-yellow-leftup', './assets/img/chevres/reggae/ChevreReggaeUpLeft.png');
+    game.load.image('goat-yellow-rightup', './assets/img/chevres/reggae/ChevreReggaeUpRight.png');
 
     // Chevre rap
-    game.load.image('goat-blue-rightdown', 'assets/chevres/rap/ChevreRapDownRight.png');
-    game.load.image('goat-blue-leftdown', 'assets/chevres/rap/ChevreRapDownleft.png');
-    game.load.image('goat-blue-leftup', 'assets/chevres/rap/ChevreRapUpLeft.png');
-    game.load.image('goat-blue-rightup', 'assets/chevres/rap/ChevreRapUpRight.png');
-    game.load.spritesheet('rain', 'assets/rain.png', 17, 17);
-    game.load.image('smoke', 'assets/smoke-puff.png');
+    game.load.image('goat-blue-rightdown', './assets/img/chevres/rap/ChevreRapDownRight.png');
+    game.load.image('goat-blue-leftdown', './assets/img/chevres/rap/ChevreRapDownleft.png');
+    game.load.image('goat-blue-leftup', './assets/img/chevres/rap/ChevreRapUpLeft.png');
+    game.load.image('goat-blue-rightup', './assets/img/chevres/rap/ChevreRapUpRight.png');
+    game.load.spritesheet('rain', './assets/img/rain.png', 17, 17);
+    game.load.image('smoke', './assets/img/smoke-puff.png');
 
 }
 
