@@ -1,0 +1,485 @@
+body{
+    font: 500 18px 'Work Sans', sans-serif;
+    background: #f7f4ed;
+    color:#393939;
+}
+/***HEADER***/
+header{
+    width: 100%;
+    overflow: hidden;
+    clear: both;
+    position: absolute;
+    z-index: 3000;
+}
+.logo {
+    margin: 20px 20px;
+    width: 8%;
+    max-width: 150px;
+    min-width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+}
+header nav{
+    margin: 30px 0 0;
+    width: 82%;
+    text-align: right;
+    display: inline-block;
+}
+header nav li{
+    display: inline-block;
+    margin-right: 2%;
+    width: 20%;
+    box-sizing: border-box;
+    text-align: center;
+    max-width: 140px;
+}
+header nav li a{
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 300;
+    color: #4c0324;
+}
+header nav li a:hover{
+    font-weight: 500;
+    transition: font-weight 0.4s;
+}
+header nav li.active a{
+    text-decoration: underline;
+    font-weight: 500;
+}
+/***GENERAL***/
+.classement .rank>li{
+    display: inline-block;
+}
+h2{
+    color: #ff4939;
+    font: 18px 'Work Sans',sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 15px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+button{
+    outline: none;
+}
+.dotations .list_lots li{
+    display : inline-block;
+    text-align: center;
+    vertical-align: top;
+    padding: 0 35px;
+}
+.dotations .list_lots .more{
+    color: #ff4939;
+    position: relative;
+    height: 172px;
+}
+.dotations .share{
+    margin-top: 60px;
+    overflow: hidden;
+    clear: both;
+}
+.dotations .share div{
+    max-width: 470px;
+    text-align: left;
+    float: left;
+}
+.dotations .share div a{
+    font-size: 12px;
+    margin-top: 40px;
+    display: block;
+    color: #393939;
+}
+.dotations .share li{
+    display: inline-block;
+    text-align: left;
+    margin: 20px 60px;
+}
+.dotations .share li a{
+    font-size: 14px;
+    color: #393939;
+    text-decoration: none;
+    line-height: 10px;
+}
+strong.dotted {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 25px;
+    display: inline-block;
+    padding: 10px 0;
+    border: 4px solid transparent;
+    -webkit-border-image: url(../img/desktop/dotted_border.png) 5 round; /* Safari 3.1-5 */
+    -o-border-image: url(../img/desktop/dotted_border.png) 5 round; /* Opera 11-12.1 */
+    border-image: url(../img/desktop/dotted_border.png) 5 round;
+}
+strong.dotted span{
+    color: #ff4939;
+    font-size: 20px;
+    padding: 0 5px;
+}
+body,html,body>div{
+    height: 100%;
+    position: relative;
+}
+.rockenseine{
+    position: absolute;
+    bottom:40px;
+    left: 60px;
+}
+.accueil .date {
+    font-size: 15px;
+    margin: 10px auto;
+    font-weight: 500;
+}
+
+.accueil h1 {
+    padding: 0;
+    margin-bottom: 50px;
+}
+.accueil{
+    background: url("../img/desktop/accueil_background.jpg") top center no-repeat;
+    background-size: 100%;
+}
+.accueil strong.dotted{
+    color: #ff4939;
+    text-transform: uppercase;
+    font-size: 20px;
+}
+.accueil p {
+    font-size: 14px;
+    font-weight: 300;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 24px;
+}
+.accueil p>strong{
+    font-weight: 600;
+}
+.accueil .content>a {
+    display: block;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.accueil button {
+    margin: 25px auto 65px;
+}
+.dotations .share ul{
+    float: right;
+}
+.dotations .share div h2{
+    margin-left: 60px;
+}
+.dotations .share div p{
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 22px;
+    margin-left: 60px;
+}
+.dotations .list_lots img {
+    margin-top: 25px;
+    height: 70px;
+}
+.dotations .list_lots .pass img{
+    height: 63px;
+}
+.dotations .list_lots p,
+.dotations .list_lots small{
+    font-size: 14px;
+    font-weight: 300;
+    color: #4c0324;
+    display: block;
+}
+.dotations .list_lots small{
+    font-size:11px;
+    margin-top:8px;
+}
+.dotations .list_lots span{
+    display: block;
+    font-weight: 900;
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+.dotations .list_lots strong{
+    display: block;
+    font-weight: 900;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 15px;
+}
+.dotations .list_lots .pass span,
+.dotations .list_lots .compile span{
+    color: #f0893d;
+}
+.dotations .list_lots .affiche span{
+    color: #ff4939;
+}
+.dotations .list_lots .goodies span{
+    color: #85bfe6;
+}
+.dotations .list_lots .more span{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    font-size: 40px;
+    font-weight: 900;
+}
+.content{
+    text-align: center;
+    width: 74%;
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+button{
+    background: #4c0324;
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+h1{
+    color: #4c0324;
+    font-family:'Work Sans',sans-serif;
+    letter-spacing: 4px;
+    font-size: 25px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    background: url('../img/desktop/titre_background.png') center center no-repeat;
+    padding: 25px;
+    margin: 0 0 30px;
+}
+h1 span{
+    color: #ff4939;
+}
+button a{
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 20px 45px;
+    display:block;
+    font-size: 16px;
+}
+.classement{
+    background: url('../img/desktop/classement_background.jpg') center center no-repeat;
+    background-size: cover;
+}
+.classement .list_classement li{
+    display: inline-block;
+    vertical-align: middle;
+    margin: 5px 0;
+}
+
+.classement .list_classement .classement_rank,
+.classement .line_separator li:first-child{
+    color: #f0ab3d;
+    font-weight: 900;
+    font-size: 35px;
+    width: 100px;
+    margin-right: 20px;
+    text-align: center;
+}
+.classement .content>ul{
+    margin-bottom: 80px;
+}
+.classement .content>ul:first-child>li:first-child .classement_rank{
+    font-size: 60px;
+}
+.classement .list_classement .separator{
+    position: relative;
+    margin: 0 30px;
+    width: 40px;
+}
+.classement .content>ul>li:last-child{
+    font-weight: 300;
+    font-size: 14px;
+    margin-top: 30px;
+}
+.classement .content>ul>li:last-child strong{
+    font-weight: 600;
+}
+.classement .list_classement .separator span{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 0 7px 10px;
+    border-color: transparent transparent transparent #f0893d;
+    position: absolute;
+    top:0;
+    left: 0;
+}
+.classement .content>ul:first-child>li:first-child .separator span{
+    border-width: 12px 0 12px 20px;
+}
+.classement .list_classement .classement_score,
+.classement .line_separator li:last-child{
+    color: #ff4939;
+    width: 100px;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.classement .content>ul>li:first-child .classement_score {
+    font-size: 26px;
+}
+.classement .list_classement .classement_pseudo,
+.classement .line_separator li:nth-child(2){
+    width: 185px;
+    color:#4c0324;
+    font-size: 16px;
+    text-align: left;
+}
+.classement .line_separator li:nth-child(3),
+.classement .line_separator li:nth-child(1){
+    color: transparent;
+}
+.classement .line_separator li:nth-child(3){
+    width: 90px;
+}
+.classement .line_separator li:last-child{
+    color: #393939;
+    font-size: 14px;
+}
+.inscription{
+    background: url('../img/desktop/inscription_background.jpg') center center no-repeat;
+    background-size: cover;
+}
+.inscription button{
+    padding: 20px 45px;
+    clear: both;
+    overflow: hidden;
+    display: block;
+    margin: 0 auto;
+}
+.inscription form>div{
+    clear: both;
+    overflow: hidden;
+}
+.inscription form>div>.left_form{
+    float: left;
+    text-align: center;
+    width: 50%;
+    padding-right: 100px;
+    box-sizing: border-box;
+}
+.inscription form>div>.right_form{
+    float: right;
+    width: 50%;
+    padding-left: 100px;
+    box-sizing: border-box;
+}
+.inscription form>div>.right_form>input,
+.inscription form>div>.left_form>input{
+    display: block;
+    margin: 0 auto;
+}
+.authentification{
+    background: url('../img/desktop/connexion_background.jpg') center center no-repeat;
+    background-size: cover;
+}
+.authentification h1{
+    margin-bottom: 12%;
+}
+.authentification button[type="submit"]{
+    padding: 2% 3%;
+    clear: both;
+    overflow: hidden;
+    display: block;
+    margin: 90px auto 0;
+    background:#4c0324;
+}
+.authentification input{
+    display: block;
+    margin: 0 auto;
+}
+.authentification button{
+    background: #ff4939;
+    width: 220px;
+}
+.authentification span{
+    display: block;
+    margin: 30px auto;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.authentification input,
+.inscription form>div>.left_form>input[type="text"],
+.inscription form>div>.right_form>input[type="text"],
+.inscription form>div>.right_form>input[type="password"],
+.inscription form>div>.right_form>input[type="email"]{
+    outline: none;
+    background: none;
+    width: 300px;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px;
+    border-width: 0 0 4px 0;
+    -webkit-border-image: url(../img/desktop/input_dotted_border.png) 5 round; /* Safari 3.1-5 */
+    -o-border-image: url(../img/desktop/input_dotted_border.png) 5 round; /* Opera 11-12.1 */
+    border-image: url(../img/desktop/input_dotted_border.png) 5 round;
+    margin-top: 20px;
+}
+.inscription .content{
+    width: 100%;
+}
+.inscription form{
+    margin: 40px 0;
+}
+.inscription h1{
+    margin-top: 50px;
+}
+.inscription form h2{
+    margin-bottom: 50px;
+}
+.inscription form small{
+    font-size: 11px;
+    max-width: 280px;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+    margin-top: 30px;
+    color: #8f8c86;
+    line-height: 18px;
+    font-weight: 300;
+}
+.inscription form div>div>div{
+    clear: both;
+    overflow: hidden;
+    max-width: 310px;
+    margin: 20px auto;
+    text-align: left;
+}
+.inscription form input[type="checkbox"]:not(:checked){
+    margin-right: 20px;
+    float: left;
+    border: 2px solid #ff4939;
+    background: none;
+}
+.inscription form div>div>div>input[type="checkbox"]:checked{
+    background:#ff4939;
+    border-color: transparent;
+}
+.inscription form div>div>div>label{
+    float: left;
+    width: 85%;
+    font-size: 14px;
+}
+.zone_jeu{
+    width: 900px;
+    height: 600px;
+}

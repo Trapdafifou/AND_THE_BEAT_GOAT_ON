@@ -1,0 +1,16 @@
+{
+    "name": "alice/and_the_beat_goat_on",
+    "authors": [
+        {
+            "name": "alicesevin",
+            "email": "sevinalice0@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Controller\\": "app/controller/",
+            "Model\\": "app/model/"
+        }
+    }
+}
