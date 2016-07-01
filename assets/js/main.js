@@ -17,9 +17,9 @@ function preload() {
     game.load.image('pause', './assets/img/pause.png');
 
     game.load.image('enceinte', './assets/img/enceinte/enceinte-off.png');
-    game.load.image('rap', './assets/img/enceinte/enceinte-rap.png');
-    game.load.image('metal', './assets/img/enceinte/enceinte-rock.png');
-    game.load.image('regge', './assets/img/enceinte/enceinte-reggae.png');
+    // game.load.image('rap', './assets/img/enceinte/enceinte-rap.png');
+    // game.load.image('metal', './assets/img/enceinte/enceinte-rock.png');
+    // game.load.image('reggae', './assets/img/enceinte/enceinte-reggae.png');
 
 
     game.load.image('pluie', './assets/img/pluie.png');
@@ -54,6 +54,9 @@ function preload() {
     game.load.image('goat-blue-leftup', './assets/img/chevres/rap/ChevreRapUpLeft.png');
     game.load.image('goat-blue-rightup', './assets/img/chevres/rap/ChevreRapUpRight.png');
     game.load.spritesheet('rain', './assets/img/rain.png', 17, 17);
+    game.load.spritesheet('rap', './assets/img/sprite-enceinte.png', 43.001, 95, 12);
+    game.load.spritesheet('reggae', './assets/img/sprite-reggae.png', 43.001, 95, 12);
+    game.load.spritesheet('metal', './assets/img/sprite-rock.png', 43.001, 95, 12);
     game.load.image('smoke', './assets/img/smoke-puff.png');
 
 }
@@ -63,11 +66,11 @@ function preload() {
 // 1 case chemin
 // 3 case rap
 // 4 case metal
-// 5 case regge
+// 5 case reggae
 // 9 case morte
 var map = [
     [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-    [9, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 9],
+    [9, 0, 0, 9, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 9],
     [9, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 9],
     [9, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 9],
     [9, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 9],
@@ -103,24 +106,20 @@ var rap;
 var metal;
 var reggae;
 var banjo;
+var animEnceinte;
 
 // Création au lancement du jeu des éléments présents dans create
 function create() {
     pause_label = game.add.image(game.width - 100, 20, 'pause');
 
-    banjo = game.add.audio('banjo');
-    banjo.play();
+    banjo = game.add.audio('banjo', true);
+    banjo.loop = true;
+    console.log(banjo)
+    banjo.pause();
     // Etat initial du jeu
     core.score = 0;
     // pas d'enceinte selectionnee
     core.etat = "repos";
-
-    var pause_label = game.add.image(game.width - 100, 20, 'pause');
-    pause_label.events.onInputDown.add(function () {
-        game.paused = true;
-        var menu = game.add.text(game.centerX, game.centerY, 'PAUSED', {font: '90px Arial', fill: '#FFFFFF'});
-        menu.anchor.setTo(0.5, 0.5);
-    });
     // Ajout de la map
     var bkg = game.add.sprite(0, 0, "background");
     game.stage.backgroundColor = '#7ec0ee';
@@ -131,17 +130,25 @@ function create() {
     metal = game.add.audio('metal');
     reggae = game.add.audio('reggae');
 
-    // Bouton du passage en mode constructeur regge
-    var boutonRegge = game.add.button(50, 450, 'regge', buildRegge, this, 2, 1, 0);
-    boutonRegge.scale.setTo(0.2, 0.2);
+
+    var pause_label = game.add.image(game.width - 100, 20, 'pause');
+    pause_label.events.onInputDown.add(function () {
+        game.paused = true;
+        var menu = game.add.text(game.centerX, game.centerY, 'PAUSED', {font: '90px Arial', fill: '#FFFFFF'});
+        menu.anchor.setTo(0.5, 0.5);
+    });
+
+    // Bouton du passage en mode constructeur reggae
+    var boutonreggae = game.add.button(50, 530, 'reggae', buildreggae, this, 2, 1, 0);
+    boutonreggae.scale.setTo(0.7, 0.7);
 
     // Bouton du passage en mode constructeur metal
-    var boutonMetal = game.add.button(50, 350, 'metal', buildMetal, this, 2, 1, 0);
-    boutonMetal.scale.setTo(0.2, 0.2);
+    var boutonMetal = game.add.button(250, 530, 'metal', buildMetal, this, 2, 1, 0);
+    boutonMetal.scale.setTo(0.7, 0.7);
 
     // Bouton du passage en mode constructeur rap
-    var boutonRap = game.add.button(150, 450, 'rap', buildRap, this, 2, 1, 0);
-    boutonRap.scale.setTo(0.2, 0.2);
+    var boutonRap = game.add.button(150, 530, 'rap', buildRap, this, 2, 1, 0);
+    boutonRap.scale.setTo(0.7, 0.7);
 
     // Création de la grille de cases
     for (var j = 0; j < 12; j++) {
@@ -164,6 +171,17 @@ function create() {
 
     // Création du groupe de goats
     goats = game.add.group();
+    // var jumpingGoat = game.add.sprite(550, 800, 'goat-rightdown');
+    // setInterval(function(){
+    //     jumpingGoat.y += 10;
+    //     if (jumpingGoat.y > 750){
+    //         jumpingGoat.y -= 10;
+    //     }
+    //     if(jumpingGoat.y >= 550){
+    //         jumpingGoat += 0;
+    //     }
+    //     console.log(jumpingGoat.y)
+    // },500);
 
     // Création d'un bon nombre de goats par interval entre 2 et 8 secondes
     setInterval(function () {
@@ -219,9 +237,9 @@ function onDown(sprite) {
     if (core.etat == "metal" && map[selectedY][selectedX] == 0) {
         building(selectedX, selectedY, "metal");
     }
-    // Construction d'une enceinte regge si permise
-    if (core.etat == "regge" && map[selectedY][selectedX] == 0) {
-        building(selectedX, selectedY, "regge");
+    // Construction d'une enceinte reggae si permise
+    if (core.etat == "reggae" && map[selectedY][selectedX] == 0) {
+        building(selectedX, selectedY, "reggae");
     }
 
 }
@@ -278,20 +296,19 @@ function buildMetal() {
 
     if (core.etat == "repos") {
         core.etat = "metal";
-        musical()
     } else {
         core.etat = "metal";
     }
 
 }
 
-// Changement du mode de construction à Regge
-function buildRegge() {
+// Changement du mode de construction à reggae
+function buildreggae() {
 
     if (core.etat == "repos") {
-        core.etat = "regge";
+        core.etat = "reggae";
     } else {
-        core.etat = "regge";
+        core.etat = "reggae";
     }
 
 }
@@ -299,14 +316,16 @@ function musical() {
 
     if (core.etat == "rap") {
         rap.play();
+        rap.loop = true;
 
         banjo.pause();
         metal.pause();
         reggae.pause();
     }
 
-    else if (core.etat == "regge") {
+    else if (core.etat == "reggae") {
         reggae.play();
+        reggae.loop = true;
 
         banjo.pause();
         metal.pause();
@@ -314,6 +333,7 @@ function musical() {
     }
     else if (core.etat == "metal") {
         metal.play();
+        rap.loop = true;
 
         banjo.pause();
         reggae.pause();
@@ -329,8 +349,11 @@ function building(caseX, caseY) {
     if (map[selectedY][selectedX] == 0) {
 
         // Visuellement
-        var enceinte = game.add.image((-35 * caseY) + (39.7 * caseX) + 322, (14 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
-        enceinte.scale.setTo(0.1, 0.1);
+        var enceinte = game.add.sprite((-27 * caseY) + (30.7 * caseX) + 322, (3 + 17 * caseX) + (17.2 * caseY) + 11, core.etat);
+        enceinte.scale.setTo(0.7, 0.7);
+        var work = enceinte.animations.add('work');
+        enceinte.animations.play('work', 15, true);
+        enceinte.animations.play();
         enceinte.name = caseX + "-" + caseY;
         enceinte.selectedX = selectedX;
         enceinte.selectedY = selectedY;
@@ -339,23 +362,23 @@ function building(caseX, caseY) {
         // L'enceinte se dégrade avec le temps et est inactive après 5s
         setTimeout(function () {
             destroy(enceinte);
-        }, 5000);
+        }, 10000);
 
         // Dans le code enregistré dans map
         if (core.etat == "rap") {
             map[selectedY][selectedX] = 3;
-            if (!rap.isPlaying){
-            musical();
+            if (!rap.isPlaying) {
+                musical();
             }
         }
         else if (core.etat == "metal") {
             map[selectedY][selectedX] = 4;
-            if (!metal.isPlaying){
+            if (!metal.isPlaying) {
                 musical();
             }
-        } else if (core.etat == "regge") {
+        } else if (core.etat == "reggae") {
             map[selectedY][selectedX] = 5;
-            if (!reggae.isPlaying){
+            if (!reggae.isPlaying) {
                 musical();
             }
         }
@@ -415,7 +438,7 @@ var actionGoat = function (goat) {
 
     // Détection d'une enceinte par vérification successive des cases adjacentes
     // goat.style == 3 : rap
-    // goat.style == 4 : regge
+    // goat.style == 4 : reggae
     // goat.style == 5 : metal
     if (map[goat.caseY + 1][goat.caseX - 1] == goat.style) { // Bas gauche
         goat.moral += 5;
@@ -554,7 +577,7 @@ function createGoat() {
 
 // Pogo de chèvres
 function anarchyGoat() {
-
+    banjo.play(loop);
     saveMap = map.slice(0);
     for (var j = 0; j < 12; j++) {
         for (var i = 0; i < 16; i++) {
@@ -600,9 +623,6 @@ function render() {
 
 // Mise à jour des données du jeu
 function update() {
-
-    // random vomi
-    smoke.customSort(scaleSort, this);
 
     // On boucle le tableau de goats pour les faire se mouvoir
     for (var i = 0; i < tableGoat.length; i++) {
